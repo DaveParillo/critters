@@ -21,9 +21,10 @@ run with -h command line argument to see what options are available.
 If when running the program over an ssh connection, no colors appear,
 try changing your terminal settings.  On the command line, try:
 
-    TERM="linux"
+    TERM="screen-256color"
 
 the ncurses view should display colors if the environment supports it.
+You may have to modify your putty settings if using ssh via putty.
 
 
 Movement
