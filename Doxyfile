@@ -1,0 +1,92 @@
+# Doxyfile 1.8.10
+
+PROJECT_NAME           = "Critters"
+
+# This tag implements a quasi-intelligent brief description abbreviator that is
+# used to form the text in various listings. Each string in this list, if found
+# as the leading text of the brief description, will be stripped from the text
+# and the result, after processing the whole list, is used as the annotated
+# text. Otherwise, the brief description is used as-is. If left blank, the
+# following values are used ($name is automatically replaced with the name of
+# the entity):The $name class, The $name widget, The $name file, is, provides,
+# specifies, contains, represents, a, an and the.
+
+ABBREVIATE_BRIEF       =
+STRIP_FROM_PATH        = ./ src
+JAVADOC_AUTOBRIEF      = YES
+QT_AUTOBRIEF           = YES
+
+TAGFILES += "cppreference-doxygen-web.tag.xml=http://en.cppreference.com/w/"
+
+
+# If you use STL classes (i.e. std::string, std::vector, etc.) but do not want
+# to include (a tag file for) the STL sources as input, then you should set this
+# tag to YES in order to let doxygen match functions declarations and
+# definitions whose arguments contain STL classes (e.g. func(std::string);
+# versus func(std::string) {}). This also make the inheritance and collaboration
+# diagrams that involve STL classes more complete and accurate.
+# The default value is: NO.
+
+BUILTIN_STL_SUPPORT    = YES
+
+# If you use Microsoft's C++/CLI language, you should set this option to YES to
+# enable parsing support.
+# The default value is: NO.
+
+CPP_CLI_SUPPORT        = NO
+
+
+#---------------------------------------------------------------------------
+# Build related configuration options
+#---------------------------------------------------------------------------
+
+# If the EXTRACT_ALL tag is set to YES, doxygen will assume all entities in
+# documentation are documented, even if no documentation was available. Private
+# class members and static file members will be hidden unless the
+# EXTRACT_PRIVATE respectively EXTRACT_STATIC tags are set to YES.
+# Note: This will also disable the warnings about undocumented members that are
+# normally produced when WARNINGS is set to YES.
+# The default value is: NO.
+
+EXTRACT_ALL            = NO
+EXTRACT_PRIVATE        = YES
+EXTRACT_PACKAGE        = YES
+EXTRACT_STATIC         = YES
+CASE_SENSE_NAMES       = NO
+GENERATE_TODOLIST      = YES
+GENERATE_TESTLIST      = YES
+GENERATE_BUGLIST       = YES
+WARN_NO_PARAMDOC       = YES
+
+INPUT                  = . src
+
+RECURSIVE              = YES
+
+FILTER_SOURCE_PATTERNS =
+
+USE_MDFILE_AS_MAINPAGE = README.md
+
+# output format options
+DISABLE_INDEX = YES
+GENERATE_TREEVIEW = YES
+VERBATIM_HEADERS       = NO
+GENERATE_HTML          = YES
+HTML_HEADER            =
+HTML_FOOTER            =
+GENERATE_LATEX         = NO
+GENERATE_MAN           = NO
+
+INCLUDE_PATH           =
+
+# Graph  options
+CLASS_DIAGRAMS         = YES
+HAVE_DOT               = NO
+CLASS_GRAPH            = YES
+# This tag requires that the tag HAVE_DOT is set to YES.
+COLLABORATION_GRAPH    = YES
+# This tag requires that the tag HAVE_DOT is set to YES.
+UML_LOOK               = NO
+CALL_GRAPH             = YES
+CALLER_GRAPH           = YES
+GRAPHICAL_HIERARCHY    = YES
+
