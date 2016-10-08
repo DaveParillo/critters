@@ -9,11 +9,11 @@
 
 // player types
 #include "Olympian.h"
-#include "Bear.h"
-#include "Lion.h"
+//#include "Bear.h"
+//#include "Lion.h"
+//#include "Tiger.h"
+//#include "Wombat.h"
 #include "Simulator.h"
-#include "Tiger.h"
-#include "Wombat.h"
 #include "View.h"
 #include "ViewCurses.h"
 #include "ViewSDL.h"
@@ -97,10 +97,10 @@ int main(int argc, char* argv[])
   s.set_debug(debug);
   s.addItem(make_shared<Stone>(),     max_stones);
   s.addItem(make_shared<Food>(),      max_food);
-  s.addItem(make_shared<Bear>(),      max_critters);
-  s.addItem(make_shared<Lion>(),      max_critters);
-  s.addItem(make_shared<Tiger>(),     max_critters);
-  s.addItem(make_shared<Wombat>(),    max_critters);
+  //s.addItem(make_shared<Bear>(),      max_critters);
+  //s.addItem(make_shared<Lion>(),      max_critters);
+  //s.addItem(make_shared<Tiger>(),     max_critters);
+  //s.addItem(make_shared<Wombat>(),    max_critters);
   s.addItem(make_shared<Olympian>(),  max_critters);
 
   s.start();

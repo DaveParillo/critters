@@ -1,10 +1,13 @@
-Critters                    {#mainpage}
-=========
+Critters
+========
 
 This is a C++ version of a homework project originally offerred
 as far as I can tell, first at Univerity of Washington
-School of COmputer Science & Engineering, CSE 142: Computer Programming I.
+School of Computer Science & Engineering, CSE 142: Computer Programming I.
 see: http://courses.cs.washington.edu/courses/cse142/
+
+The whole idea is that the game is incomplete - you have to write the code to make
+the critters move, fight, mate, and eat.
 
 Runs the critters (Rock, Paper, Scissors) competition using 'critters' as
 combatants. The combat occurs in a 2D grid 'world' with animals moving around.
@@ -14,7 +17,7 @@ The world size is determined by the console size when the program is started.
 The upper-left cell has coordinates (0, 0); 
 x increases to the right and y increases downward.
 
-Currently implemented in ncurses. Maybe someday in SDL also.
+Currently implemented in ncurses and in SDL2, but only runs in Windows under cygwin.
 
 run with -h command line argument to see what options are available.
 
@@ -65,13 +68,13 @@ To remember which beats which, notice that the starting letters of
 
 If the critters make the same choice, the result is a Draw.
 
-|            |             |         | Critter #2 |         |           |
-|------------|:------------|:-------:|:----------:|:-------:|:---------:|
-|            |             | **ROAR  | POUNCE     | SCRATCH | FORFEIT** |
-|            | **ROAR**    |   Draw  |   #2 wins  | #1 wins |  #1 wins  |
-| Critter #1 | **POUNCE**  | #1 wins |    Draw    | #2 wins |  #1 wins  |
-|            | **SCRATCH** | #2 wins |   #1 wins  |   Draw  |  #1 wins  |
-|            | **FORFEIT** | #2 wins |   #2 wins  | #2 wins |    Draw   |
+|            |             |          | Critter #2 |             |             |
+|------------|:------------|:--------:|:----------:|:-----------:|:-----------:|
+|            |             | **ROAR** | **POUNCE** | **SCRATCH** | **FORFEIT** |
+|            | **ROAR**    |   Draw   |   #2 wins  | #1 wins     |  #1 wins    |
+| Critter #1 | **POUNCE**  | #1 wins  |    Draw    | #2 wins     |  #1 wins    |
+|            | **SCRATCH** | #2 wins  |   #1 wins  |   Draw      |  #1 wins    |
+|            | **FORFEIT** | #2 wins  |   #2 wins  | #2 wins     |    Draw     |
 
 Mating
 ------
@@ -110,7 +113,9 @@ how much food they have eaten, and how many other animals they have killed.
 Compiling
 =========
 
-Requires a ISO C++11 compatible compiler and the ncurses library.
+Requires a ISO C++11 compatible compiler and both the ncurses and SDL2 libraries.
+In either * nix, MacOSX, or cygwin, install ncurses-devel, SDL2, and SDLttf.
+The fonts used are checked in here.
 
 Compiles in clang or g++ under cygwin with:
 
