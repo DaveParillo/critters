@@ -9,15 +9,14 @@
 
 // player types
 #include "Olympian.h"
-//#include "Bear.h"
-//#include "Lion.h"
-//#include "Tiger.h"
-//#include "Wombat.h"
+#include "Bear.h"
+#include "Lion.h"
+#include "Tiger.h"
+#include "Wombat.h"
+
 #include "Simulator.h"
 #include "View.h"
 #include "ViewCurses.h"
-#include "ViewSDL.h"
-
 
 using std::make_shared;
 using std::string;
@@ -28,14 +27,13 @@ using std::string;
  */
 static void show_usage(const string name)
 {
-  std::cerr << "Usage: " << name << " [-hd] [-f #] [-g] [-s #] [-n #]"
+  std::cerr << "Usage: " << name << " [-hd] [-f #] [-s #] [-n #]"
     << "Options:\n"
     << "  -h   Show this text\n"
     << "  -d   Enable debug output.\n"
     << "\t Output is written to std::cerr.  Redirect accordingly, for example\n"
     << "\t a.out 2> debug.txt\n"
     << "  -f   Set the amount of Food on the board.  Default = 250.\n"
-    << "  -g   Start the Graphical version.  The default is a console / text version.\n"
     << "  -s   Set the number of Stones on the board.  Default = 10.\n"
     << "  -n   Set the number of Critters for each Species.  Default = 25.\n"
     << std::endl;
@@ -61,7 +59,7 @@ int main(int argc, char* argv[])
   string view = "default";
   string prog = argv[0];
 
-  while ((c = getopt (argc, argv, "hdf:gn:s:")) != -1) {
+  while ((c = getopt (argc, argv, "hdf:n:s:")) != -1) {
     switch (c) {
       case 'h':
         show_usage(prog);
@@ -78,9 +76,6 @@ int main(int argc, char* argv[])
       case 's':
         max_stones = std::atoi(optarg);
         break;
-      case 'g':
-        view = "sdl";
-        break;
       default:
         show_usage(prog);
         break;
@@ -89,18 +84,14 @@ int main(int argc, char* argv[])
 
 
   Simulator s;
-  if (view == "sdl") {
-    s.set_view(std::unique_ptr<View>(new ViewSDL()));
-  } else {
-    s.set_view(std::unique_ptr<View>(new ViewCurses()));
-  }
+  s.set_view(std::unique_ptr<View>(new ViewCurses()));
   s.set_debug(debug);
   s.addItem(make_shared<Stone>(),     max_stones);
   s.addItem(make_shared<Food>(),      max_food);
-  //s.addItem(make_shared<Bear>(),      max_critters);
-  //s.addItem(make_shared<Lion>(),      max_critters);
-  //s.addItem(make_shared<Tiger>(),     max_critters);
-  //s.addItem(make_shared<Wombat>(),    max_critters);
+  s.addItem(make_shared<Bear>(),      max_critters);
+  s.addItem(make_shared<Lion>(),      max_critters);
+  s.addItem(make_shared<Tiger>(),     max_critters);
+  s.addItem(make_shared<Wombat>(),    max_critters);
   s.addItem(make_shared<Olympian>(),  max_critters);
 
   s.start();

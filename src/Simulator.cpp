@@ -9,17 +9,12 @@
 #include <utility>
 #include <unistd.h>
 
-
-
 #include "Simulator.h"
 #include "Critter.h"
 #include "Point.h"
 #include "Food.h"
 #include "Species.h"
 #include "ViewCurses.h"
-#include "ViewSDL.h"
-
-
 
 using std::shared_ptr;
 

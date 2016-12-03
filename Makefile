@@ -19,21 +19,7 @@
 # * No need to add source files to makefile manually.
 #
 ##############################################################################
-SYS := $(shell gcc -dumpmachine)
-ifneq (, $(findstring darwin, $(SYS)))
-	F_PATH   = /Users/dparillo/Library/Frameworks
-	LDFLAGS  = -F$(F_PATH) -framework SDL2 -framework SDL2_ttf
-	LDLIBS = -lncurses
-	INCLUDES = -I$(module_source_dir) \
-						 -I$(F_PATH)/SDL2.framework/Headers \
-						 -I$(F_PATH)/SDL2_ttf.framework/Headers 
-else
-	LDLIBS = -lncurses -lSDL2 -lSDL2_ttf
-	INCLUDES = -I$(module_source_dir)
-endif
 SHELL=bash
-CC = clang++
-
 # Basic configuration variables.
 config=debug
 module_name=critters
@@ -41,6 +27,11 @@ module_source_dir=src
 module_dep_dir=dep
 module_obj_dir=obj
 module_bin_dir=.
+
+LDLIBS = -lncurses
+INCLUDES = -I$(module_source_dir)
+CC = clang++
+
 
 ifeq ($(config),debug)
 	CXXFLAGS = -g -Wall -c -Wextra -pedantic  -std=c++11 -I$(INCLUDES)
