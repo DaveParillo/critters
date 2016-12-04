@@ -1,5 +1,6 @@
 #include <algorithm>
 #include <string>
+#include <vector>
 
 #include "Color.h"
 #include "ViewCurses.h"
@@ -72,27 +73,39 @@ void ViewCurses::update_time(const unsigned long tick) {
 }
 
 void ViewCurses::update_score(const map<string, shared_ptr<Species>> players) {
-  auto i = 1;
+  std::vector<shared_ptr<Species>> dudes;
   for (auto& p: players) {
+    dudes.push_back(p.second);
+  }
+  std::sort(dudes.begin(), dudes.end(), 
+      [](shared_ptr<Species> a, shared_ptr<Species> b) {
+        return b->score() < a->score();   
+      });
+
+  auto i = 1;
+  for (auto& d: dudes) {
     //mvwprintw(score, i, 2,  CLEAR.c_str());  // not working, unexpected
-    mvwprintw(score, i, 2,  p.second->name().c_str());
+    mvwprintw(score, i, 2,  "                ");
     mvwprintw(score, i, 15, "        ");
     mvwprintw(score, i, 23, "        ");
     mvwprintw(score, i, 30, "        ");
     mvwprintw(score, i, 38, "        ");
     mvwprintw(score, i, 49, "        ");
     mvwprintw(score, i, 59, "        ");
-    mvwprintw(score, i, 16, std::to_string(p.second->alive()).c_str());
-    mvwprintw(score, i, 24, std::to_string(p.second->dead()).c_str());
-    mvwprintw(score, i, 31, std::to_string(p.second->kills()).c_str());
-    mvwprintw(score, i, 39, std::to_string(p.second->feedings()).c_str());
-    mvwprintw(score, i, 50, std::to_string(p.second->starved()).c_str());
-    mvwprintw(score, i, 60, std::to_string(p.second->score()).c_str());
+    mvwprintw(score, i, 2,  d->name().c_str());
+    mvwprintw(score, i, 16, std::to_string(d->alive()).c_str());
+    mvwprintw(score, i, 24, std::to_string(d->dead()).c_str());
+    mvwprintw(score, i, 31, std::to_string(d->kills()).c_str());
+    mvwprintw(score, i, 39, std::to_string(d->feedings()).c_str());
+    mvwprintw(score, i, 50, std::to_string(d->starved()).c_str());
+    mvwprintw(score, i, 60, std::to_string(d->score()).c_str());
     i++;
   }
   wrefresh(score);
 }
 
+// each cell in ncurses is shaded using a 'color pair'
+// a foreground and a background color assigned to an int value
 void ViewCurses::setup_colors() const {
   init_pair(1,COLOR_WHITE, COLOR_BLUE);   // used for score area
 

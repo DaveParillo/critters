@@ -4,6 +4,7 @@
 #include <string>
 #include <unordered_map>
 #include <ncurses.h>
+
 #include "Color.h"
 #include "Critter.h"
 #include "Point.h"

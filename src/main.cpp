@@ -9,10 +9,10 @@
 
 // player types
 #include "Olympian.h"
-#include "Bear.h"
-#include "Lion.h"
-#include "Tiger.h"
-#include "Wombat.h"
+#include "solutions/Bear.h"
+#include "solutions/Lion.h"
+#include "solutions/Tiger.h"
+#include "solutions/Wombat.h"
 
 #include "Simulator.h"
 #include "View.h"

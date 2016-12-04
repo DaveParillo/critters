@@ -1,5 +1,4 @@
-#ifndef CRITTER_H
-#define CRITTER_H
+#pragma once
 
 #include <algorithm>
 #include <cstdlib>
@@ -59,6 +58,11 @@ class Critter {
         _glyph = std::toupper(name.at(0));
         _food_remaining = MAX_FOOD / 2;
       }
+
+    /**
+     * Destroy Critter resources.
+     */
+    virtual ~Critter();
 
     /**
      * Defines attack options for Critters.
@@ -277,23 +281,15 @@ class Critter {
      */
     void tick();
 
-    /**
-     * Insert formatted Critter state information into an output stream.
-     * @todo this should probably not be a friend - it only accesses public methods
-     * @param os reference to an output stream
-     * @param it reference to a Critter to print
-     * @return the modified output stream
-     */
-    friend std::ostream& operator<<(std::ostream &os, const Critter& it) {
-      os << "Name: " << it.name() << std::endl;
-      os << "\tColor: " << ColorNames[it.color()] << std::endl;
-      os << "\tIs awake?: " << it.is_awake() << std::endl;
-      os << "\tIs mating?: " << it.is_mating() << std::endl;
-      os << "\tIs player?: " << it.is_player() << std::endl;
-      return os;
-    }
-
+   
 };
 
+/**
+ * Insert formatted Critter state information into an output stream.
+ * @param os reference to an output stream
+ * @param it reference to a Critter to print
+ * @return the modified output stream
+ */
+std::ostream& operator<<(std::ostream &os, const Critter& it);
 
-#endif
+

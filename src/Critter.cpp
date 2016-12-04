@@ -5,6 +5,11 @@
 
 using std::endl;
 
+Critter::~Critter() 
+{
+ // currently no resources to clean up 
+}
+
 void Critter::start_mating(unsigned int length) {
   assert(!_mating && _awake);
   _mating = true;
@@ -44,6 +49,13 @@ void Critter::tick() {
 }
 
 
-
+std::ostream& operator<<(std::ostream &os, const Critter& it) {
+  os << "Name: " << it.name() << std::endl;
+  os << "\tColor: " << it.color() << std::endl;
+  os << "\tIs awake?: " << it.is_awake() << std::endl;
+  os << "\tIs mating?: " << it.is_mating() << std::endl;
+  os << "\tIs player?: " << it.is_player() << std::endl;
+  return os;
+}
 
 

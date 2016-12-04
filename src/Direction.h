@@ -24,30 +24,18 @@ enum class Direction {
 };
 
 
-
 /**
- * Allows the Direction class members to be printed with meaningful strings.
- * Primarily used for debugging.
- * Example:
+ * Send text representation of a Direction to an output stream.
  *
- *     cout << "Direction is " << DirectionNames[Direction::SOUTH] << endl;
+ * @param os reference to an output stream
+ * @param rhs reference to the Direction
+ * @return the modified output stream
  */
-static std::map<Direction, const char *> DirectionNames = 
-{
-  {Direction::CENTER, "CENTER"},
-  {Direction::NORTH, "NORTH"},
-  {Direction::NORTH_EAST, "NORTH EAST"},
-  {Direction::EAST, "EAST"},
-  {Direction::SOUTH_EAST, "SOUTH EAST"},
-  {Direction::SOUTH, "SOUTH"},
-  {Direction::SOUTH_WEST, "SOUTH WEST"},
-  {Direction::WEST, "WEST"},
-  {Direction::NORTH_WEST, "NORTH WEST"}
-};
+std::ostream& operator<<(std::ostream& os, const Direction& rhs);
 
 
 /**
- * Allows the Direction class members to be used ina range for loop
+ * Allows the Direction class members to be used in a range for loop
  * Example:
  *    map<Direction, shared_ptr<Critter>> neighbors;
  *    for (const auto& d: directions) {

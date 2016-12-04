@@ -1,7 +1,7 @@
-#ifndef COLOR_H
-#define COLOR_H
+#pragma once
 
-#include <map>
+#include <iostream>
+#include <string>
 
 /**
  * @class Color
@@ -27,23 +27,13 @@ enum class Color {
   WHITE
 };
 
-
 /**
- * Allows the Color class members to be printed with meaningful strings.
- * Primarily used for debugging.
- * Example:
+ * Send text representation of a Color to an output stream.
  *
- * cout << "Color is " << ColorNames[Color::RED] << endl;
+ * @param os reference to an output stream
+ * @param rhs reference to the Color
+ * @return the modified output stream
  */
-static std::map<Color, const char *> ColorNames = {
-  {Color::BLACK, "BLACK"},
-  {Color::RED, "RED"},
-  {Color::GREEN, "GREEN"},
-  {Color::BLUE, "BLUE"},
-  {Color::YELLOW, "YELLOW"},
-  {Color::MAGENTA, "MAGENTA"},
-  {Color::CYAN, "CYAN"},
-  {Color::WHITE, "WHITE"}
-};
+std::ostream& operator<<(std::ostream& os, const Color& rhs);
 
-#endif
+

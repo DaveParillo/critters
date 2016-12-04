@@ -47,26 +47,3 @@ Point Point::translate(const Point& p, const Direction& movement,
 }
 
 
-
-//
-// operator overloads
-//
-ostream& operator<<(ostream& os, const Point& rhs) {
-  return os << "(" << rhs.x() << "," << rhs.y() << ")";
-}
-
-
-bool Point::operator==(const Point& rhs) const {
-  return (_x == rhs.x() && _y == rhs.y());
-}
-bool Point::operator!=(const Point& rhs) const {
-  return (_x != rhs.x() || _y != rhs.y());
-}
-
-bool Point::operator<(const Point& rhs) const {
-  return (_y < rhs.y() || (_y == rhs.y() && _x < rhs.x()));
-}
-
-
-
-

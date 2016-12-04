@@ -1,14 +1,10 @@
-#ifndef SPECIES_H
-#define SPECIES_H
+#pragma once
 
 #include <iostream>
 #include <string>
-#include <set>
 #include "Critter.h"
 
-using std::set;
 using std::string;
-using std::ostream;
 
 /**
  * Stores summary statistics for a set of Critters.
@@ -105,14 +101,16 @@ class Species {
       }
     }
 
-    /**
-     * Insert formatted Species state information into an output stream.
-     * @param os reference to an output stream
-     * @param s reference to a Species to print
-     * @return the modified output stream
-     */
-    friend ostream& operator<<(ostream &os, const Species &s);
 
 };
 
-#endif
+/**
+ * Insert formatted Species state information into an output stream.
+ * @param os reference to an output stream
+ * @param s reference to a Species to print
+ * @return the modified output stream
+ */
+std::ostream& operator<<(std::ostream& os, const Species& s);
+
+
+

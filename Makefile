@@ -34,9 +34,9 @@ CC = clang++
 
 
 ifeq ($(config),debug)
-	CXXFLAGS = -g -Wall -c -Wextra -pedantic  -std=c++11 -I$(INCLUDES)
+	CXXFLAGS = -g -Wall -c -Wextra -pedantic  -std=c++11 $(INCLUDES)
 else
-	CXXFLAGS = -Wall -c -Wextra -pedantic -std=c++11 -I$(INCLUDES)
+	CXXFLAGS = -Wall -c -Wextra -pedantic -std=c++11 $(INCLUDES)
 endif
 
 # 

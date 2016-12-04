@@ -1,19 +1,12 @@
 #include <algorithm>
 #include <cassert>
 #include <iostream>
-#include <map>
-#include <unordered_map>
-#include <memory>
 #include <random>
-#include <string>
 #include <utility>
 #include <unistd.h>
 
 #include "Simulator.h"
-#include "Critter.h"
-#include "Point.h"
 #include "Food.h"
-#include "Species.h"
 #include "ViewCurses.h"
 
 using std::shared_ptr;
@@ -39,6 +32,7 @@ void Simulator::start() {
   int count = 0;
 
   view->redraw(tiles);
+  view->update_score(players);
 
   while (command != 'q')
   {
@@ -62,7 +56,7 @@ void Simulator::start() {
       view->update_score(players);
       if (lone_species())                 play = false;
     }
-    count += 1;
+    ++count;
   }
 
 }
@@ -252,7 +246,7 @@ void Simulator::process_mate(const Point& src,  shared_ptr<Critter> src_it, cons
   auto neighbors = get_neighbors(src);
   Direction dir = Direction::CENTER;;
   // find empty neightbor to put baby
-  for (int i=0; i<8; i++) {
+  for (int i=0; i<8; ++i) {
     if ("Empty" == neighbors[directions[i]]->name()) {
       dir = directions[i];
     }
@@ -368,7 +362,7 @@ void Simulator::update_kill_stats(shared_ptr<Critter> winner, shared_ptr<Critter
 void Simulator::addItem(shared_ptr<Critter> item, const int num_items) {
   assert(item != nullptr);
 
-  for (auto i = 0; i < num_items; i++) {
+  for (auto i = 0; i < num_items; ++i) {
     auto c = item->create();
     Point p = get_random_blank_tile(); //{rand()%view->width()+1, rand()%view->height()+1};
     assert(tiles[p] == blank_tile);

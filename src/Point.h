@@ -1,13 +1,10 @@
-#ifndef POINT_H
-#define POINT_H
+#pragma once
 
 #include <iostream>
 #include <functional>
 #include <memory>
 
 #include "Direction.h"
-
-using std::ostream;
 
 /**
  * Defines a single position in the Critter world.
@@ -55,39 +52,50 @@ class Point {
      * @return the new Point
      */
     Point translate(const Point& p, const Direction& movement,
-        const int max_x, const int max_y) const;
-
-    /**
-     * Member comparison for ==.
-     * @param rhs the Point to compare with this point.
-     * @return true if this point == rhs point
-     */
-    bool operator==(const Point& rhs) const;
-    /**
-     * Member comparison for !=.
-     * @param rhs the Point to compare with this point.
-     * @return true if this point != rhs point
-     */
-    bool operator!=(const Point& rhs) const;
-    /**
-     * Member comparison for less than
-     * @param rhs the Point to compare with this point.
-     * @return true if this point < rhs point
-     */
-    bool operator< (const Point& rhs) const;
-
-    /**
-     * Send point to output stream.
-     *
-     * @todo should not be a friend
-     *
-     * @param os reference to an output stream
-     * @param rhs reference to the Point
-     * @return the modified output stream
-     */
-    friend ostream& operator<<(ostream& os, const Point& rhs);
+                    const int max_x, const int max_y) const;
 
 };
+
+/**
+ * Send point to output stream.
+ *
+ * @param os reference to an output stream
+ * @param rhs reference to the Point
+ * @return the modified output stream
+ */
+inline std::ostream& operator<<(std::ostream& os, const Point& rhs) {
+  return os << "(" << rhs.x() << "," << rhs.y() << ")";
+}
+
+/**
+ * Comparison for ==.
+ * @param lhs the Point left operand
+ * @param rhs the Point right operand
+ * @return true if the coordinates of both points are equal.
+ */
+inline bool operator==(const Point& lhs, const Point& rhs) {
+  return (lhs.x() == rhs.x() && lhs.y() == rhs.y());
+}
+
+/**
+ * Comparison for !=.
+ * @param lhs the Point left operand
+ * @param rhs the Point right operand
+ * @return true if either coordinate between the two points differs.
+ */
+inline bool operator!=(const Point& lhs, const Point& rhs) {
+  return !operator==(lhs,rhs);
+}
+
+/**
+ * Comparison for less than.
+ * @param lhs the Point left operand
+ * @param rhs the Point right operand
+ * @return true if this point < rhs point
+ */
+inline bool operator< (const Point& lhs, const Point& rhs) {
+  return (lhs.y() < rhs.y() || (lhs.y() == rhs.y() && lhs.x() < rhs.x()));
+}
 
 
 
@@ -106,7 +114,7 @@ namespace std {
        * Return the hash code for a point.
        *
        * @see http://en.cppreference.com/w/cpp/utility/hash
-       * @param p the Point to generate a hascode for
+       * @param p the Point to generate a hashcode for
        * @return the hashcode
        */
       std::size_t operator()(const Point& p) const
@@ -123,4 +131,5 @@ namespace std {
 
 }
 
-#endif
+
+
