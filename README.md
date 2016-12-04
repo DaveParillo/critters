@@ -4,6 +4,7 @@ Critters
 This is a C++ version of a homework project originally offerred
 as far as I can tell, first at Univerity of Washington
 School of Computer Science & Engineering, CSE 142: Computer Programming I.
+
 see: http://courses.cs.washington.edu/courses/cse142/
 
 The whole idea is that the game is incomplete - you have to write the code to make
@@ -17,7 +18,8 @@ The world size is determined by the console size when the program is started.
 The upper-left cell has coordinates (0, 0); 
 x increases to the right and y increases downward.
 
-Currently implemented in ncurses and in SDL2, but only runs in Windows under cygwin.
+Currently implemented in ncurses and in SDL2 (on a branch), 
+but only runs in Windows under cygwin.
 
 run with -h command line argument to see what options are available.
 
@@ -28,6 +30,10 @@ try changing your terminal settings.  On the command line, try:
 
 the ncurses view should display colors if the environment supports it.
 You may have to modify your putty settings if using ssh via putty.
+There are many sites that might help het putty settings correct,
+for example http://serverfault.com/questions/475925/how-to-fix-putty-showing-garbled-characters
+but in the Mesa environment things work if in the Window/Translation tab
+the character set is set to 'Use font encodings'.
 
 
 Movement
@@ -68,13 +74,13 @@ To remember which beats which, notice that the starting letters of
 
 If the critters make the same choice, the result is a Draw.
 
-|            |             |          | Critter #2 |             |             |
-|------------|:------------|:--------:|:----------:|:-----------:|:-----------:|
-|            |             | **ROAR** | **POUNCE** | **SCRATCH** | **FORFEIT** |
-|            | **ROAR**    |   Draw   |   #2 wins  | #1 wins     |  #1 wins    |
-| Critter #1 | **POUNCE**  | #1 wins  |    Draw    | #2 wins     |  #1 wins    |
-|            | **SCRATCH** | #2 wins  |   #1 wins  |   Draw      |  #1 wins    |
-|            | **FORFEIT** | #2 wins  |   #2 wins  | #2 wins     |    Draw     |
+|                |             |          | Critter #2 |             |             |
+|----------------|:------------|:--------:|:----------:|:-----------:|:-----------:|
+|                |             | **ROAR** | **POUNCE** | **SCRATCH** | **FORFEIT** |
+|                | **ROAR**    |   Draw   |   #2 wins  | #1 wins     |  #1 wins    |
+| **Critter #1** | **POUNCE**  | #1 wins  |    Draw    | #2 wins     |  #1 wins    |
+|                | **SCRATCH** | #2 wins  |   #1 wins  |   Draw      |  #1 wins    |
+|                | **FORFEIT** | #2 wins  |   #2 wins  | #2 wins     |    Draw     |
 
 Mating
 ------
@@ -117,7 +123,7 @@ Requires a ISO C++11 compatible compiler and both the ncurses and SDL2 libraries
 In either * nix, MacOSX, or cygwin, install ncurses-devel, SDL2, and SDLttf.
 The fonts used are checked in here.
 
-Compiles in clang or g++ under cygwin with:
+Compiles in clang or g++ on mac, linux, and cygwin with:
 
     c++ *.cpp -std=c++11 -Wall -Wextra -pedantic -lncurses
 
@@ -153,9 +159,6 @@ To clean a specific configuration you need to declare it on the command line:
 
     make clean config=release
 
-A CodeBlocks project file is also included, but is currently a work in progress.
-Use what you can, but expect to have to modify it for your environment.
- 
 Building documentation
 ----------------------
 
