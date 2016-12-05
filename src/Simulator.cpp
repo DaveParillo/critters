@@ -50,7 +50,7 @@ void Simulator::start() {
 
     if (play && count > delay) {
       count = 0;
-      tick++;
+      ++tick;
       update_tiles();
       view->update_time(tick);
       view->update_score(players);
@@ -58,13 +58,12 @@ void Simulator::start() {
     }
     ++count;
   }
-
 }
 
 bool Simulator::lone_species() {
   auto count = 0;
   for (auto p : players) {
-    if (p.second->alive() > 0) count++;
+    if (p.second->alive() > 0) ++count;
   }
   return count <= 1;
 }
@@ -84,8 +83,8 @@ void Simulator::update_tiles() {
 void Simulator::init_tiles() {
   assert(tiles.empty());
   if (debug) std::cerr << "height: " << view->height() << ", width: " << view->width() << "\n";
-  for (int x=0; x<=view->width()-1; x++) {
-    for (int y=0; y<=view->height()-1; y++) {
+  for (int x=0; x<=view->width()-1; ++x) {
+    for (int y=0; y<=view->height()-1; ++y) {
       Point p = {x, y};
       tiles[p] = blank_tile;
       blanks[p] = blank_tile;
@@ -334,14 +333,12 @@ Simulator::fight_results (shared_ptr<Critter> attacker,
   if ((a_attack == Critter::Attack::ROAR    && d_attack == Critter::Attack::SCRATCH) ||
       (a_attack == Critter::Attack::POUNCE  && d_attack == Critter::Attack::ROAR) ||
       (a_attack == Critter::Attack::SCRATCH && d_attack == Critter::Attack::POUNCE) ||
-      d_attack == Critter::Attack::FORFEIT) {
+       d_attack == Critter::Attack::FORFEIT) {
     return Simulator::AttackResults::ATTACKER;
   }
 
   return Simulator::AttackResults::DEFENDER;
 }
-
-
 
 void Simulator::update_kill_stats(shared_ptr<Critter> winner, shared_ptr<Critter> loser) {
   players[winner->name()]->add_kill();
@@ -355,16 +352,26 @@ void Simulator::update_kill_stats(shared_ptr<Critter> winner, shared_ptr<Critter
   loser->lost();            // report status
 }
 
-
-
-
-
 void Simulator::addItem(shared_ptr<Critter> item, const int num_items) {
   assert(item != nullptr);
+  typedef std::unordered_map<Point,shared_ptr<Critter>>::value_type tile_type;
+
+  int free = count_if(tiles.begin(), tiles.end(), 
+      [&](tile_type t) {
+        return t.second == this->blank_tile;
+      });
+  if (free < num_items) {
+    view->teardown();
+    std::cerr << "Not enough blank tiles remaining to add " 
+              << num_items << ' ' << item->name() << std::endl;
+    std::cerr << "Try reducing critters, food, or stones, or increasing x and y.\n\n";
+    std::cerr << "Exiting.\n\n";
+    exit(-1);
+  }
 
   for (auto i = 0; i < num_items; ++i) {
     auto c = item->create();
-    Point p = get_random_blank_tile(); //{rand()%view->width()+1, rand()%view->height()+1};
+    Point p = get_random_blank_tile();
     assert(tiles[p] == blank_tile);
     tiles[p] = c;
     blanks.erase(p);

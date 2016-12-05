@@ -81,6 +81,13 @@ class ViewCurses : public View {
      */
     int  width()  override { return world_wd; }
 
+    /**
+     * Cleanup allocated ncurses windows and resources.
+     */
+    void teardown() override;
+
+
+
   private:
     WINDOW* world;                             /**< nucurses window for the critter playing surface */
     WINDOW* score;                             /**< nucurses window for the scores */
@@ -134,10 +141,7 @@ class ViewCurses : public View {
      * @param color the color pair to unset.
      */
     void unset_color(const int color) const;
-    /**
-     * Cleanup allocated ncurses windows and resources.
-     */
-    void teardown();
+    
 
 };
 

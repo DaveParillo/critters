@@ -9,10 +9,12 @@
 
 // player types
 #include "Olympian.h"
-//#include "solutions/Bear.h"
-//#include "solutions/Lion.h"
-//#include "solutions/Tiger.h"
-//#include "solutions/Wombat.h"
+#ifdef HAVE_SOLUTIONS
+#include "solutions/Bear.h"
+#include "solutions/Lion.h"
+#include "solutions/Tiger.h"
+#include "solutions/Wombat.h"
+#endif
 
 #include "Simulator.h"
 #include "View.h"
@@ -27,7 +29,7 @@ using std::string;
  */
 static void show_usage(const string name)
 {
-  std::cerr << "Usage: " << name << " [-hd] [-f #] [-s #] [-n #]"
+  std::cerr << "Usage: " << name << " [-hd] [-f #] [-s #] [-n #] [-x #] [-y #]"
     << "Options:\n"
     << "  -h   Show this text\n"
     << "  -d   Enable debug output.\n"
@@ -36,6 +38,8 @@ static void show_usage(const string name)
     << "  -f   Set the amount of Food on the board.  Default = 250.\n"
     << "  -s   Set the number of Stones on the board.  Default = 10.\n"
     << "  -n   Set the number of Critters for each Species.  Default = 25.\n"
+    << "  -x   Set the world width.  Default = window width.\n"
+    << "  -y   Set the world height.  Default = window height - space allocated for the score.\n"
     << std::endl;
   exit(0);
 }
@@ -50,16 +54,18 @@ static void show_usage(const string name)
  */
 int main(int argc, char* argv[])
 {
-  int max_food = 250;
-  int max_stones = 10;
+  int max_food = 50;
+  int max_stones = 50;
   int max_critters = 25;
+  int x = 0;
+  int y = 0;
 
   int c;
   int debug = 0;
   string view = "default";
   string prog = argv[0];
 
-  while ((c = getopt (argc, argv, "hdf:n:s:")) != -1) {
+  while ((c = getopt (argc, argv, "hdf:n:s:x:y:")) != -1) {
     switch (c) {
       case 'h':
         show_usage(prog);
@@ -67,14 +73,15 @@ int main(int argc, char* argv[])
       case 'd':
         debug = 1;
         break;
-      case 'f':
-        max_food = std::atoi(optarg);
+      case 'f': max_food     = std::atoi(optarg);
         break;
-      case 'n':
-        max_critters = std::atoi(optarg);
+      case 'n': max_critters = std::atoi(optarg);
         break;
-      case 's':
-        max_stones = std::atoi(optarg);
+      case 's': max_stones   = std::atoi(optarg);
+        break;
+      case 'x': x = std::atoi(optarg);
+        break;
+      case 'y': y = std::atoi(optarg);
         break;
       default:
         show_usage(prog);
@@ -82,16 +89,18 @@ int main(int argc, char* argv[])
     }
   }
 
-
   Simulator s;
-  s.set_view(std::unique_ptr<View>(new ViewCurses()));
+
+  s.set_view(std::unique_ptr<View>(new ViewCurses(x, y)));
   s.set_debug(debug);
   s.addItem(make_shared<Stone>(),     max_stones);
   s.addItem(make_shared<Food>(),      max_food);
-  //s.addItem(make_shared<Bear>(),      max_critters);
-  //s.addItem(make_shared<Lion>(),      max_critters);
-  //s.addItem(make_shared<Tiger>(),     max_critters);
-  //s.addItem(make_shared<Wombat>(),    max_critters);
+#ifdef HAVE_SOLUTIONS
+  s.addItem(make_shared<Bear>(),      max_critters);
+  s.addItem(make_shared<Lion>(),      max_critters);
+  s.addItem(make_shared<Tiger>(),     max_critters);
+  s.addItem(make_shared<Wombat>(),    max_critters);
+#endif
   s.addItem(make_shared<Olympian>(),  max_critters);
 
   s.start();

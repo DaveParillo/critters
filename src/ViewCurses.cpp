@@ -12,7 +12,7 @@ ViewCurses::ViewCurses() :
 }
 
 ViewCurses::ViewCurses(const int height, const int width) :
-  world_ht(height), score_ht(6), world_wd(width), score_wd(width)
+  world_ht(height), score_ht(10), world_wd(width), score_wd(0)
 {
   setup();
 }

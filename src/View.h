@@ -85,6 +85,11 @@ class View {
      * @return the width of the view occupied by the Critter world.
      */
     virtual int width()  {return _width;}
+
+    /**
+     * Cleanup allocated view windows and resources.
+     */
+    virtual void teardown() = 0;
 };
 
 

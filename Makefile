@@ -30,13 +30,14 @@ module_bin_dir=.
 
 LDLIBS = -lncurses
 INCLUDES = -I$(module_source_dir)
-CC = clang++
+CC = $(CXX)
 
+CXXFLAGS = -Wall -c -Wextra -pedantic  -std=c++11 $(INCLUDES)
 
 ifeq ($(config),debug)
-	CXXFLAGS = -g -Wall -c -Wextra -pedantic  -std=c++11 $(INCLUDES)
+	CXXFLAGS += -g
 else
-	CXXFLAGS = -Wall -c -Wextra -pedantic -std=c++11 $(INCLUDES)
+	CXXFLAGS += -DHAVE_SOLUTIONS 
 endif
 
 # 
