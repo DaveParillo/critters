@@ -4,7 +4,8 @@ CXXFLAGS = -Wall -Wextra -pedantic -std=c++11
 endif
 
 EXE := critters
-LIB := libcritters.a
+LIB := libcritters.so
+LIBS := -lncurses -lm -lc
 
 COMMON :=   Color.o \
 			Critter.o \
@@ -25,20 +26,20 @@ LIB_OBJS    := $(COMMON)
 all: $(EXE)
 
 $(LIB): $(LIB_OBJS)
-	ar crs $(LIB) $(LIB_OBJS)
+	$(CXX) -shared -o $(LIB) $(LIB_OBJS) $(LIBS)
 
 $(EXE): $(LIB) $(CRITTERS)
-	$(CXX) $(CXXFLAGS) $(CRITTERS) -static $< -L. -lcritters -o $@
+	$(CXX) $(CXXFLAGS) $(CRITTERS) $< -L. $(LIB) $(LIBS) -o $@ 
 
 # import existing depenency info
 -include $(OBJS:.o=.d)
 
 %.o: %.cpp
-	$(CXX) -c $(CXXFLAGS) -I. -I.. $*.cpp -o $*.o
+	$(CXX) -fPIC -c $(CXXFLAGS) -I. -I.. $*.cpp -o $*.o
 	$(CXX) -MM $(CXXFLAGS) -I. -I.. $*.cpp > $*.d
 
-.PHONY: clean test
+.PHONY: clean
 clean: 
-	rm -f $(exe) *.o *.d $(LIB)
+	rm -f $(EXE) *.o *.d $(LIB)
 
 

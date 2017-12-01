@@ -1,24 +1,23 @@
-#include <iostream>
-#include <memory>
-#include <string>
-#include <unistd.h>
-
-// non player entities
-#include "Food.h"
-#include "Stone.h"
-
 // player types
-#include "Olympian.h"
-#ifdef HAVE_SOLUTIONS
+//#include "Olympian.h"
+
+// default players
 #include "solutions/Bear.h"
 #include "solutions/Lion.h"
 #include "solutions/Tiger.h"
 #include "solutions/Wombat.h"
-#endif
+// non player entities
+#include "Food.h"
+#include "Stone.h"
+
 
 #include "Simulator.h"
 #include "View.h"
 #include "ViewCurses.h"
+#include <iostream>
+#include <memory>
+#include <string>
+#include <unistd.h>
 
 using std::make_shared;
 using std::string;
@@ -29,7 +28,7 @@ using std::string;
  */
 static void show_usage(const string name)
 {
-  std::cerr << "Usage: " << name << " [-hd] [-f #] [-s #] [-n #] [-x #] [-y #]"
+  std::cerr << "Usage: " << name << " [-hd] [-f #] [-s #] [-n #] [-x #] [-y #] [-LTBW]\n"
     << "Options:\n"
     << "  -h   Show this text\n"
     << "  -d   Enable debug output.\n"
@@ -40,32 +39,35 @@ static void show_usage(const string name)
     << "  -n   Set the number of Critters for each Species.  Default = 25.\n"
     << "  -x   Set the world width.  Default = window width.\n"
     << "  -y   Set the world height.  Default = window height - space allocated for the score.\n"
+    << "\n"
+    << "  -L   Add Lion to the simulation\n"
+    << "  -T   Add Tiger to the simulation\n"
+    << "  -B   Add Bear to the simulation\n"
+    << "  -W   Add Wombat to the simulation\n"
     << std::endl;
   exit(0);
 }
 
-/**
- * Main program.
- * - Processes command line arguments
- * - Creates Simulator and adds players and non-player entities to the simulation.
- * - starts the sim.
- * @param argc # of comamnd line args
- * @param argv array of comamnd line args as strings
- */
-int main(int argc, char* argv[])
-{
+int main(int argc, char** argv) {
   int max_food = 50;
   int max_stones = 50;
   int max_critters = 25;
+
+  // screen ht and width.  0 means use current window size to comute x & y
   int x = 0;
   int y = 0;
+
+  bool use_lion = false;
+  bool use_tiger = false;
+  bool use_bear = false;
+  bool use_wombat = false;
 
   int c;
   int debug = 0;
   string view = "default";
   string prog = argv[0];
 
-  while ((c = getopt (argc, argv, "hdf:n:s:x:y:")) != -1) {
+  while ((c = getopt (argc, argv, "hdf:n:s:x:y:LTBW")) != -1) {
     switch (c) {
       case 'h':
         show_usage(prog);
@@ -83,6 +85,20 @@ int main(int argc, char* argv[])
         break;
       case 'y': y = std::atoi(optarg);
         break;
+
+      // enable solution critters
+      case 'L':
+        use_lion = true;
+        break;
+      case 'T':
+        use_tiger = true;
+        break;
+      case 'B':
+        use_bear = true;
+        break;
+      case 'W':
+        use_wombat = true;
+        break;
       default:
         show_usage(prog);
         break;
@@ -95,18 +111,18 @@ int main(int argc, char* argv[])
   s.set_debug(debug);
   s.addItem(make_shared<Stone>(),     max_stones);
   s.addItem(make_shared<Food>(),      max_food);
-#ifdef HAVE_SOLUTIONS
-  s.addItem(make_shared<Bear>(),      max_critters);
-  s.addItem(make_shared<Lion>(),      max_critters);
-  s.addItem(make_shared<Tiger>(),     max_critters);
-  s.addItem(make_shared<Wombat>(),    max_critters);
-#endif
-  s.addItem(make_shared<Olympian>(),  max_critters);
+
+  if (use_bear)   s.addItem(make_shared<Bear>(),      max_critters);
+  if (use_lion)   s.addItem(make_shared<Lion>(),      max_critters);
+  if (use_tiger)  s.addItem(make_shared<Tiger>(),     max_critters);
+  if (use_wombat) s.addItem(make_shared<Wombat>(),    max_critters);
+
+//  s.addItem(make_shared<Olympian>(),  max_critters);
 
   s.start();
   return 0;
-}
 
+}
 
 
 
