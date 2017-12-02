@@ -41,5 +41,6 @@ $(EXE): $(LIB) $(CRITTERS)
 .PHONY: clean
 clean: 
 	rm -f $(EXE) *.o *.d $(LIB)
+	rm -f solutions/*.o solutions/*.d
 
 
