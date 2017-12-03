@@ -17,7 +17,8 @@ class Bear : public Critter {
       movedNorthLast(false)  { }
 
     /**
-     * Inform the sim that this Tiger is a player and can take actions against other players.
+     * Inform the simulator that this Critter is a player 
+     * and can take actions against other players.
      * @return always returns true
      */
     bool   is_player() const override { return true; }
@@ -29,23 +30,28 @@ class Bear : public Critter {
 
     /**
      * Decide whether to eat or not.
-     * Each time a tiger eats, its initial hunger decreases by 1.
-     * @return true of this tiger should eat.
+     * @return true Bears alwats eat, given the chance.
      */
     bool eat() override;
 
     /**
      * Perform Bear-ish fighting actions.
      * @param opponent the critter unforunate enough to face a Bear
-     * @return the attack chosen by this bear
+     * @return the attack chosen by this bear.
+     * A bear will only return Critter::Attack::SCRATCH
      */
     Attack fight(std::string opponent) override;
 
     /**
      * Choose a move direction.
-     * The critter mostly moves north and west.
      * @param neighbors the contents of the tile surrounding this bear
-     * @return the direction this tiger want to move
+     * @return the move direction. Bears only move north and west.
+     *
+     * It's a 'Polar' Bear, after all.
+     *
+     * A Bear will try to avoid obstacles,
+     * but it's inability to move in other directions means it
+     * can get stuck sometimes.
      */
     Direction move(std::map<Direction, std::shared_ptr<Critter>> neighbors) override;
 

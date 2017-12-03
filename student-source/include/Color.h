@@ -1,6 +1,7 @@
 #pragma once
 
-#include <iostream>
+#include <array>
+#include <iosfwd>
 #include <string>
 
 /**
@@ -26,6 +27,25 @@ enum class Color {
   CYAN,
   WHITE
 };
+
+/**
+ * An array container for the colors
+ */
+const std::array<Color,8> colors = 
+{
+  {
+    Color::BLACK,
+    Color::RED,
+    Color::GREEN,     
+    Color::BLUE,
+    Color::YELLOW,    
+    Color::MAGENTA,
+    Color::CYAN,     
+    Color::WHITE
+  }
+};
+
+
 
 /**
  * Send text representation of a Color to an output stream.

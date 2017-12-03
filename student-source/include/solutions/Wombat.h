@@ -1,12 +1,12 @@
 #pragma once
-
-#include <chrono> 
-#include <iostream>
-#include <memory>
-
 #include <Critter.h>
 #include <Color.h>
 #include <Direction.h>
+
+#include <chrono> 
+#include <iostream>
+#include <map>
+#include <memory>
 
 
 /**
@@ -31,15 +31,17 @@ class Wombat : public Critter {
      */
     Direction look_for_food   (std::map<Direction, std::shared_ptr<Critter>> neighbors);
 
-    size_t turn_;
-    Direction last_move_;
+    /**
+     * A seed for random behaviors
+     */
+    unsigned seed_ = std::chrono::system_clock::now().time_since_epoch().count();
 
 
   public:
     /**
      * Create a new Wombat.
      */
-    Wombat();
+    Wombat() : Critter("Wily Wombat") { }
 
     /**
      * Informs the Simulator that this Wombat is a 'player'.
@@ -54,10 +56,14 @@ class Wombat : public Critter {
     Color  color()   const override { return Color::GREEN; }
 
     /**
-     * Tell the sim that this critter wants to eat.
-     * @return true if this critter want to eat this turn.
+     * Tell the sim that this Wombat wants to eat.
+     *
+     * @return true if this Wombat wants to eat this turn.
      */
-    bool eat() override;
+    bool eat() override {
+  return food_remaining() < 350;
+}
+
 
     /**
      * Informs the Simulator of how to respond during a fight.
@@ -71,7 +77,10 @@ class Wombat : public Critter {
     /**
      * Informs the Simulator of Wombat movement during a turn.
      *
-     * Wombats move in a random direction each turn.
+     * Wombats move in the same direction until they encouter something
+     * that forces a change (Stone, Food, another Critter).
+     * Then they will pick a new direction.
+     *
      * They may move in any of the 8 available directions, 
      * but never choose to stay put (Direction::CENTER).
      * @param neighbors who or what is in the cells adjacent to this wombat

@@ -76,6 +76,11 @@ class Critter {
     };
 
     /**
+     * Array of attacks to make looping on Attack types more convenient.
+     */
+    static const std::array<Critter::Attack, 4> attacks;
+
+    /**
      * Return the name of this Critter.
      * @return the name of this Critter.
      */
@@ -202,7 +207,7 @@ class Critter {
      */
     virtual void draw()   const {}
     /**
-     * Used by the simulator to inform this Critter is has been put to sleep.
+     * Used by the simulator to inform this Critter it has been put to sleep.
      * A sleeping Critter can take no actions.
      * It can't move until it wakes up and immediately loses all fights.
      */
@@ -281,15 +286,22 @@ class Critter {
      */
     void tick();
 
-   
+
 };
 
 /**
  * Insert formatted Critter state information into an output stream.
  * @param os reference to an output stream
- * @param it reference to a Critter to print
+ * @param it reference to a Critter to stream
  * @return the modified output stream
  */
 std::ostream& operator<<(std::ostream &os, const Critter& it);
 
+/**
+ * Insert Attack enum class values into an output stream.
+ * @param os reference to an output stream
+ * @param rhs reference to a Attack to stream
+ * @return the modified output stream
+ */
+std::ostream& operator<<(std::ostream& os, const Critter::Attack& rhs);
 
