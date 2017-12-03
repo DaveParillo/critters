@@ -15,7 +15,9 @@ COMMON :=   Color.o \
 			Species.o \
 			ViewCurses.o \
 			solutions/Bear.o \
+			solutions/Duck.o \
 			solutions/Lion.o \
+			solutions/Raccoon.o \
 			solutions/Tiger.o \
 			solutions/Wombat.o
 
@@ -38,9 +40,10 @@ $(EXE): $(LIB) $(CRITTERS)
 	$(CXX) -fPIC -c $(CXXFLAGS) -I. -I.. $*.cpp -o $*.o
 	$(CXX) -MM $(CXXFLAGS) -I. -I.. $*.cpp > $*.d
 
-.PHONY: clean
-clean: 
-	rm -f $(EXE) *.o *.d $(LIB)
-	rm -f solutions/*.o solutions/*.d
+.PHONY: clean tidy
+clean: tidy
+	rm -f $(EXE) $(LIB)
 
+tidy: 
+	rm -f *.o *.d solutions/*.o solutions/*.d
 

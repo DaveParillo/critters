@@ -48,6 +48,15 @@ void Critter::tick() {
   }
 }
 
+const std::array<Critter::Attack, 4> Critter::attacks = {
+  {
+      Critter::Attack::ROAR,
+      Critter::Attack::POUNCE,
+      Critter::Attack::SCRATCH,
+      Critter::Attack::FORFEIT
+  }
+};
+
 
 std::ostream& operator<<(std::ostream &os, const Critter& it) {
   os << "Name: " << it.name() << std::endl;
@@ -58,4 +67,16 @@ std::ostream& operator<<(std::ostream &os, const Critter& it) {
   return os;
 }
 
+std::ostream& operator<<(std::ostream& os, const Critter::Attack& rhs) {
+  std::string a;
+  switch (rhs) {
+    case Critter::Attack::ROAR:    a = "ROAR";    break;
+    case Critter::Attack::POUNCE:  a = "POUNCE";  break;
+    case Critter::Attack::SCRATCH: a = "SCRATCH"; break;
+    case Critter::Attack::FORFEIT: a = "FORFEIT"; break;
+    default:                       a = "NULL"; break;
+  }
+  return os << a;
+
+}
 

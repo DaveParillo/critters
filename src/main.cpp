@@ -5,11 +5,12 @@
 #include "solutions/Bear.h"
 #include "solutions/Lion.h"
 #include "solutions/Tiger.h"
+#include "solutions/Raccoon.h"
 #include "solutions/Wombat.h"
+#include "solutions/Duck.h"
 // non player entities
 #include "Food.h"
 #include "Stone.h"
-
 
 #include "Simulator.h"
 #include "View.h"
@@ -28,7 +29,7 @@ using std::string;
  */
 static void show_usage(const string name)
 {
-  std::cerr << "Usage: " << name << " [-hd] [-f #] [-s #] [-n #] [-x #] [-y #] [-LTBW]\n"
+  std::cerr << "Usage: " << name << " [-hd] [-f #] [-s #] [-n #] [-x #] [-y #] [-LTBRWD]\n"
     << "Options:\n"
     << "  -h   Show this text\n"
     << "  -d   Enable debug output.\n"
@@ -43,7 +44,9 @@ static void show_usage(const string name)
     << "  -L   Add Lion to the simulation\n"
     << "  -T   Add Tiger to the simulation\n"
     << "  -B   Add Bear to the simulation\n"
+    << "  -R   Add Raccoon to the simulation\n"
     << "  -W   Add Wombat to the simulation\n"
+    << "  -D   Add Duck to the simulation\n"
     << std::endl;
   exit(0);
 }
@@ -60,14 +63,16 @@ int main(int argc, char** argv) {
   bool use_lion = false;
   bool use_tiger = false;
   bool use_bear = false;
+  bool use_raccoon = false;
   bool use_wombat = false;
+  bool use_duck = false;
 
   int c;
   int debug = 0;
   string view = "default";
   string prog = argv[0];
 
-  while ((c = getopt (argc, argv, "hdf:n:s:x:y:LTBW")) != -1) {
+  while ((c = getopt (argc, argv, "hdf:n:s:x:y:LTBRWD")) != -1) {
     switch (c) {
       case 'h':
         show_usage(prog);
@@ -96,8 +101,14 @@ int main(int argc, char** argv) {
       case 'B':
         use_bear = true;
         break;
+      case 'R':
+        use_raccoon = true;
+        break;
       case 'W':
         use_wombat = true;
+        break;
+      case 'D':
+        use_duck = true;
         break;
       default:
         show_usage(prog);
@@ -112,12 +123,14 @@ int main(int argc, char** argv) {
   s.addItem(make_shared<Stone>(),     max_stones);
   s.addItem(make_shared<Food>(),      max_food);
 
-  if (use_bear)   s.addItem(make_shared<Bear>(),      max_critters);
-  if (use_lion)   s.addItem(make_shared<Lion>(),      max_critters);
-  if (use_tiger)  s.addItem(make_shared<Tiger>(),     max_critters);
-  if (use_wombat) s.addItem(make_shared<Wombat>(),    max_critters);
+  if (use_bear)     s.addItem(make_shared<Bear>(),    max_critters);
+  if (use_lion)     s.addItem(make_shared<Lion>(),    max_critters);
+  if (use_tiger)    s.addItem(make_shared<Tiger>(),   max_critters);
+  if (use_raccoon)  s.addItem(make_shared<Raccoon>(), max_critters);
+  if (use_wombat)   s.addItem(make_shared<Wombat>(),  max_critters);
+  if (use_duck)     s.addItem(make_shared<Duck>(),    max_critters);
 
-//  s.addItem(make_shared<Olympian>(),  max_critters);
+  //s.addItem(make_shared<Olympian>(),  max_critters);
 
   s.start();
   return 0;
