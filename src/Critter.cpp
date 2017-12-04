@@ -5,11 +5,6 @@
 
 using std::endl;
 
-Critter::~Critter() 
-{
- // currently no resources to clean up 
-}
-
 void Critter::start_mating(unsigned int length) {
   assert(!_mating && _awake);
   _mating = true;

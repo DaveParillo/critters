@@ -60,19 +60,25 @@ class Raccoon: public Critter
      */
     bool eat() override;
 
+    /**
+     * Create a new raccoon
+     */
     std::shared_ptr<Critter> create() override {
       return std::make_shared<Raccoon>();
     }
 
   private:
-    size_t               distance_;
-    Direction            direction_;
+    size_t    distance_;  /**< Random distance to move */
+    Direction direction_; /**< Random direction to move */
 
     /** 
      * Pick a random direction
      */
     Direction random_direction();
 
+    /** 
+     * Pick a random distance
+     */
     size_t random_distance();
 
 };

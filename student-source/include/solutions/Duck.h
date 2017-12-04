@@ -94,13 +94,23 @@ class Duck: public Critter
      */
     void lost() const override;
 
+    /**
+     * Allow the simulator to make a new Duck.
+     */
     std::shared_ptr<Critter> create() override {
       return std::make_shared<Duck>();
     }
 
-    // -------------------------------------------------------------------------
-    // Encapsulate fight result data
-    // Use to predict most successful attacks against known enemy types
+    /**
+     * Store fight results.
+     * Used to predict most successful attacks 
+     * against previously encountered critters.
+     *
+     * Works best against critters with non-random attacks.
+     *
+     * Works reliably enough against critters that depend on rand()
+     * to almost always win.
+     */
     struct FightResults
     {
       // 0: ROAR,    1: POUNCE
@@ -117,39 +127,41 @@ class Duck: public Critter
         data{{r, p, s, f}}
       {}
 
-      size_t operator[](size_t i) { 
+      size_t operator[](const size_t i) const { 
         return data[i];
       }
 
-     // @return Attack predicted to have most success
+      /** 
+       * @return Attack current best guess at what attack to use.
+       */
       Attack best_attack() const;
 
-      // @param attack Attack data to increment
-      void won(Attack attack) {
-        ++wins;
-        if (attack > Attack::FORFEIT || attack < Attack::ROAR) return;
-        ++data.at(size_t(attack));
-      }
+      /** 
+       * Record our glorious victory.
+       * Increment the data array with the attack used.
+       */
+      void won(const Attack& attack);
 
-      // @param attack Attack data to decrement
-      void lost(Attack attack) {
-        ++losses;
-        if (attack > Attack::FORFEIT || attack < Attack::ROAR) return;
-        auto &n = data.at(size_t(attack));
-        if (n > 1) --n;
-      }
+      /** 
+       * Record our shameful defeat.
+       * Increment the data array with the attack used.
+       */
+      void lost(const Attack& attack);
     };
 
-    using fightmap = std::map<std::string, FightResults>;
-
   private:
-    size_t               distance_;
-    Direction            direction_;
-    std::string          opponent_;
-    Attack               attack_used_;
+    size_t           distance_;      /**< Random distance to move */
+    Direction        direction_;     /**< Random direction to move */
+    std::string      opponent_;      /**< current opponent */
+    Attack           attack_used_;   /**< attack used against the current opponent */
 
-    static fightmap      fight_results_;
+    static std::map<std::string, FightResults>  
+                     fight_results_; /**< tally of wins and losses for each critter */
 
+    /**
+     * Used to assign a weight to each neighboring cell.
+     * The direction with the highest weight wins.
+     */
     struct Priority {
       Direction direction;
       size_t weight;
@@ -160,13 +172,22 @@ class Duck: public Critter
       {}
     };
     
-    using neighbor = std::pair<const Direction, std::shared_ptr<Critter>>;
+    /**
+     * Evaluate a single neighbor (Direction, Critter pair), assign it
+     * a weight and update weighted_dirs.
+     */
+    void evaluate_neighbor(const std::pair<const Direction, std::shared_ptr<Critter>>& n, 
+                           std::vector<Priority>* weighted_dirs);
 
-    void evaluate_neighbor(const neighbor &n, std::vector<Priority>* weighted_dirs);
-
+    /**
+     * Returns true if this Duck is moderately hungry.
+     */
     bool is_hungry() const;
 
 
+    /**
+     * Returns true if this Duck is desperately hungry.
+     */
     bool is_starving() const;
 
     /** 
@@ -178,11 +199,21 @@ class Duck: public Critter
 
     size_t random_distance();
 
-    /// Get attack
-    // @param data Fight data map
-    // @param name Opponent critter name
-    // @return Suggested attack (weighted or randomized)
-    Attack best_attack(const fightmap& data, std::string name);
-
+    /** Get the best attack possible against the provided opponent.
+     * @param data results from previous fights
+     * @param name opponent name
+     * @return Suggested attack 
+     *
+     * If we've encountered this opponent before, use the FightResults map
+     * otherwise return a random Attack.
+     *
+     * @todo
+     *  This doesn't work well against opponents that make truly random attacks
+     *  Should be able to detect this and use only random attacks against them.
+     */
+    Attack best_attack(const std::map<std::string, 
+                       FightResults>& data, 
+                       const std::string& name);
 
 };
+

@@ -62,7 +62,7 @@ class Critter {
     /**
      * Destroy Critter resources.
      */
-    virtual ~Critter();
+    virtual ~Critter() = default;
 
     /**
      * Defines attack options for Critters.
@@ -213,7 +213,10 @@ class Critter {
      */
     virtual void sleep()  const {}
 
-    /* Accessor methods */
+    //
+    // Functions used by the simulator, not players.
+    //
+
     /**
      * Returns the amount of time until the Critter sleeps due to extreme hunger.
      * @return the food reserves remaining
