@@ -114,6 +114,7 @@ void Simulator::update (const Point& p, shared_ptr<Critter> it) {
 
     auto neighbors = get_neighbors(p);
     auto move_dir = it->move(neighbors);
+    if (move_dir < Direction::CENTER || move_dir > Direction::NORTH_WEST) move_dir = Direction::CENTER;
     if (can_move(p, it, move_dir)) {
       move (p, it, move_dir);
     } else {
@@ -243,7 +244,7 @@ bool Simulator::can_mate (shared_ptr<Critter> src_it, shared_ptr<Critter> dest_i
 void Simulator::process_mate(const Point& src,  shared_ptr<Critter> src_it, const Point& dest, shared_ptr<Critter> dest_it)   {
 
   auto neighbors = get_neighbors(src);
-  Direction dir = Direction::CENTER;;
+  Direction dir = Direction::CENTER;
   // find empty neightbor to put baby
   for (int i=0; i<8; ++i) {
     if ("Empty" == neighbors[directions[i]]->name()) {
@@ -323,8 +324,11 @@ Simulator::fight_results (shared_ptr<Critter> attacker,
   if (defender->is_asleep() || defender->is_mating()) {
     return Simulator::AttackResults::ATTACKER;
   }
+  using Attack = Critter::Attack;
   auto a_attack = attacker->fight(defender->name());
   auto d_attack = defender->fight(attacker->name());
+  if (a_attack < Attack::ROAR || a_attack > Attack::SCRATCH) a_attack = Attack::FORFEIT;
+  if (d_attack < Attack::ROAR || d_attack > Attack::SCRATCH) d_attack = Attack::FORFEIT;
 
   if (a_attack == d_attack) {
     return Simulator::AttackResults::DRAW;
