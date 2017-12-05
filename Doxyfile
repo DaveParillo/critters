@@ -60,7 +60,7 @@ GENERATE_TESTLIST      = YES
 GENERATE_BUGLIST       = YES
 WARN_NO_PARAMDOC       = YES
 
-INPUT                  = src
+INPUT                  = src README.md
 
 RECURSIVE              = YES
 
