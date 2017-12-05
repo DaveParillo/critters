@@ -6,7 +6,7 @@
 #include <map>
 #include <memory>
 
-/*
+/**
  * A random Raccoon.
  *
  * The Raccoon strategy is to act completely randomly.

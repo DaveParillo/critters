@@ -11,7 +11,7 @@
 using std::size_t;
 using Attack = Critter::Attack;
 
-/*
+/**
  * An extremely dangerous Duck.
  *
  * The Duck is the only default competitor that attempts to use optional parts of the Critter interface.
