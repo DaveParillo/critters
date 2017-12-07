@@ -7,7 +7,8 @@ EXE := critters
 LIB := libcritters.so
 LIBS := -lncurses -lm -lc
 
-COMMON :=   Color.o \
+COMMON := main.o \
+      Color.o \
 			Critter.o \
 			Direction.o \
 			Point.o \
@@ -21,14 +22,14 @@ COMMON :=   Color.o \
 			solutions/Tiger.o \
 			solutions/Wombat.o
 
-CRITTERS     := main.o $(COMMON)
+CRITTERS     := add_players.o $(COMMON)
 
 LIB_OBJS    := $(COMMON)
 
 all: $(EXE)
 
 $(LIB): $(LIB_OBJS)
-	$(CXX) -shared -o $(LIB) $(LIB_OBJS) $(LIBS)
+	$(CXX) -pie -shared -Wl,-E -o $(LIB) $(LIB_OBJS) $(LIBS)
 
 $(EXE): $(LIB) $(CRITTERS)
 	$(CXX) $(CXXFLAGS) $(CRITTERS) $< -L. $(LIB) $(LIBS) -o $@ 

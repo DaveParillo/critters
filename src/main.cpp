@@ -1,6 +1,5 @@
-// player types
-//#include "Olympian.h"
 
+#include "add_players.h"
 // default players
 #include "solutions/Bear.h"
 #include "solutions/Lion.h"
@@ -130,7 +129,9 @@ int main(int argc, char** argv) {
   if (use_wombat)   s.addItem(make_shared<Wombat>(),  max_critters);
   if (use_duck)     s.addItem(make_shared<Duck>(),    max_critters);
 
-  //s.addItem(make_shared<Olympian>(),  max_critters);
+  for (const auto& p: add_players()) {
+    s.addItem(p,  max_critters);
+  }
 
   s.start();
   return 0;
