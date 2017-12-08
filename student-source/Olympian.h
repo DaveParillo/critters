@@ -1,28 +1,21 @@
 /*
  * Olympian.h
  *
- *  Created on: Apr 22, 2014
- *      Author: Tasha
- * To rename your Olympian, follow these steps.  We'll assume
- * you're changing the name from Olympian to MyCritter.
- * Anywhere you see MyCritter in the instructions, use the name
- * of your critter.
+ * To make your own custom Olympian, follow these steps.
  *
- * 1. Change the name of this file to MyCritter.h.  Close the file
- *    then right-click on it in the project tree and choose rename.
+ * 1. Copy this file to a name based on the name of your critter
  *
- * 2. In this file, replace all occurrences of 
- *    OLYMPIAN_H with MY_CRITTER_H
+ * 2. In this file, replace all occurrences of Olympian with 
+ *    Feel free to be creative, 
+ *    but recall class names and identifiers cannot contain spaces.
  *
- * 3. In this file, replace all occurrences of Olympian with MyCritter.
+ * 3. In add_players.cpp, add an #include for your critter and 
+ *    add it to you the players vector.
  *
- * 4. In main.cpp, change line 6 to say #include "MyCritter.h"
- *
- * 5. In main.cpp, in lines 104, replace Olympian with MyCritter.
  */
 
-#ifndef OLYMPIAN_H
-#define OLYMPIAN_H
+#pragma once
+
 #include <iostream>
 #include <memory>
 
@@ -66,5 +59,3 @@ class Olympian : public Critter {
 };
 
 
-
-#endif
