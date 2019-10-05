@@ -26,17 +26,31 @@ class ViewCurses : public View {
     /**
      * Init the ncurses environment.
      */
-    ViewCurses();
+    ViewCurses() 
+    {
+      setup();
+    }
+
     /**
      * Init the ncurses environment at a size.
      * @param height the desired height of the world
      * @param width the desired width of the world
      */
-    ViewCurses(int height, int width);
+    ViewCurses(const int height, const int width) 
+      : world_ht(height)
+        , score_ht(10)
+        , world_wd(width)
+        , score_wd(0)
+    {
+      setup();
+    }
+
     /**
      * Destroy the ncurses environment.
      */
-    ~ViewCurses();
+    ~ViewCurses() {
+      teardown();
+    }
 
     /**
      * Render Critters and other objects on the screen.
@@ -86,18 +100,16 @@ class ViewCurses : public View {
      */
     void teardown() override;
 
-
-
   private:
-    WINDOW* world;                             /**< nucurses window for the critter playing surface */
-    WINDOW* score;                             /**< nucurses window for the scores */
-    WINDOW* help;                              /**< nucurses window for the help dialog */
-    int maxheight;                             /**< maximum height of the console containing the game */
-    int maxwidth;                              /**< maximum width of the console containing the game */
-    int world_ht;                              /**< height of the world screen */
-    int score_ht;                              /**< height of the score screen */
-    int world_wd;                              /**< width of the world screen */
-    int score_wd;                              /**< width of the score screen */
+    WINDOW* world = nullptr;                   /**< nucurses window for the critter playing surface */
+    WINDOW* score = nullptr;                   /**< nucurses window for the scores */
+    WINDOW* help = nullptr;                    /**< nucurses window for the help dialog */
+    int maxheight = 24;                        /**< maximum height of the console containing the game */
+    int maxwidth = 72;                         /**< maximum width of the console containing the game */
+    int world_ht = 0;                          /**< height of the world screen */
+    int score_ht = 10;                         /**< height of the score screen */
+    int world_wd = 0;                          /**< width of the world screen */
+    int score_wd = 0;                          /**< width of the score screen */
     const std::string CLEAR = {65, ' '};       /**< a bunch of blank spaces used to clear a score line */
 
     /**

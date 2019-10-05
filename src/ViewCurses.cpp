@@ -5,23 +5,6 @@
 #include "Color.h"
 #include "ViewCurses.h"
 
-ViewCurses::ViewCurses() :
-  maxheight(24), maxwidth(72), world_ht(0), score_ht(10), world_wd(0), score_wd(0)
-{
-  setup();
-}
-
-ViewCurses::ViewCurses(const int height, const int width) :
-  world_ht(height), score_ht(10), world_wd(width), score_wd(0)
-{
-  setup();
-}
-
-
-ViewCurses::~ViewCurses() {
-  teardown();
-}
-
 void ViewCurses::setup() {
   // init ncurses
   initscr();

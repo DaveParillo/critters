@@ -1,5 +1,6 @@
 #pragma once
 
+#include <cstdint>
 #include <iostream>
 #include <functional>
 #include <memory>
@@ -12,36 +13,49 @@
  */
 class Point {
   private:
-    const unsigned char _x;     /**< The x-coordinate of this position */
-    const unsigned char _y;     /**< The y-coordinate of this position */
+    int16_t _x = 0;     /**< The x-coordinate of this position */
+    int16_t _y = 0;     /**< The y-coordinate of this position */
 
   public:
     /**
      * Create a new point at a default location.
      */
-    Point() : _x(0), _y(0) {}
+    Point() = default;
     /**
      * Create a new point at a specific location.
-     * @param x the new x-coordinate
-     * @param y the new y-coordinate
      */
-    Point(int x, int y) : _x(x), _y(y) {}
+    Point(int16_t x, int16_t y)
+      : _x{x}, _y{y}
+    {}
+    
     /**
      * Point copy constructor.
-     * @param p the current point.
      */
-    Point( const Point& p ) : _x(p.x()), _y(p.y()) {}
+    Point(const Point&) = default;
+    /**
+     * Point move constructor.
+     */
+    Point(Point&&) = default;
+    /**
+     * Point copy assignment.
+     */
+    Point& operator=(const Point&) = default;
+    /**
+     * Point move assignment.
+     */
+    Point& operator=(Point&&) = default;
+
 
     /**
      * Get the X-coordinate of a Point.
      * @return the current x-coordinate.
      */
-    int x() const { return _x; }
+    int16_t x() const { return _x; }
     /**
      * Get the Y-coordinate of a Point.
      * @return the current y-coordinate.
      */
-    int y() const { return _y; }
+    int16_t y() const { return _y; }
 
     /**
      * Given a Point and Direction, calculate a new Point.
@@ -52,7 +66,7 @@ class Point {
      * @return the new Point
      */
     Point translate(const Point& p, const Direction& movement,
-                    const int max_x, const int max_y) const;
+                    const int16_t max_x, const int16_t max_y) const;
 
 };
 
@@ -123,9 +137,9 @@ namespace std {
         using std::hash;
         using std::string;
 
-        return ((hash<int>()(17)
-              ^ (hash<int>()(p.x()) << 1)) >> 1)
-              ^ (hash<int>()(p.y()) << 1);
+        return ((hash<int>()(719)
+              ^ (hash<int16_t>()(p.x()) << 1)) >> 1)
+              ^ (hash<int16_t>()(p.y()) << 1);
       }
     };
 

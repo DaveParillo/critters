@@ -1,7 +1,10 @@
 #include <algorithm>
 #include <cassert>
+#include <cstdint>
+#include <chrono>
 #include <iostream>
 #include <random>
+#include <thread>
 #include <utility>
 #include <unistd.h>
 
@@ -9,6 +12,8 @@
 #include "Food.h"
 #include "ViewCurses.h"
 
+using namespace std::chrono_literals;
+using std::this_thread::sleep_for;
 using std::shared_ptr;
 
 Simulator::Simulator() :
@@ -46,7 +51,7 @@ void Simulator::start() {
     if (command == 'p')                   play = !play;
     if (command == '-')                   delay = std::min(1250, delay + 50);
     if (command == '=' || command == '+') delay = std::max(  50, delay - 50);
-    usleep(1000);
+    sleep_for(100ms);
 
     if (play && count > delay) {
       count = 0;
@@ -83,8 +88,8 @@ void Simulator::update_tiles() {
 void Simulator::init_tiles() {
   assert(tiles.empty());
   if (debug) std::cerr << "height: " << view->height() << ", width: " << view->width() << "\n";
-  for (int x=0; x<=view->width()-1; ++x) {
-    for (int y=0; y<=view->height()-1; ++y) {
+  for (int16_t x=0; x<=view->width()-1; ++x) {
+    for (int16_t y=0; y<=view->height()-1; ++y) {
       Point p = {x, y};
       tiles[p] = blank_tile;
       blanks[p] = blank_tile;

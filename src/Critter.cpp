@@ -3,8 +3,6 @@
 
 #include "Critter.h"
 
-using std::endl;
-
 void Critter::start_mating(unsigned int length) {
   assert(!_mating && _awake);
   _mating = true;
@@ -54,11 +52,11 @@ const std::array<Critter::Attack, 4> Critter::attacks = {
 
 
 std::ostream& operator<<(std::ostream &os, const Critter& it) {
-  os << "Name: " << it.name() << std::endl;
-  os << "\tColor: " << it.color() << std::endl;
-  os << "\tIs awake?: " << it.is_awake() << std::endl;
-  os << "\tIs mating?: " << it.is_mating() << std::endl;
-  os << "\tIs player?: " << it.is_player() << std::endl;
+  os << "Name: " << it.name()
+     << "\n\tColor: " << it.color()
+     << "\n\tIs awake?: " << it.is_awake()
+     << "\n\tIs mating?: " << it.is_mating()
+     << "\n\tIs player?: " << it.is_player();
   return os;
 }
 

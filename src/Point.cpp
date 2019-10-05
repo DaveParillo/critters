@@ -1,8 +1,10 @@
+#include <cstdint>
+
 #include "Direction.h"
 #include "Point.h"
 
 Point Point::translate(const Point& p, const Direction& movement, 
-                       const int max_x, const int max_y) const {
+                       const int16_t max_x, const int16_t max_y) const {
   auto x     = p.x();
   auto y     = p.y();
   auto north = (p.y() == 0? max_y-1: p.y()-1);

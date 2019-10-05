@@ -32,7 +32,7 @@ LDLIBS = -lncurses
 INCLUDES = -I$(module_source_dir)
 CC = $(CXX)
 
-CXXFLAGS = -Wall -c -Wextra -pedantic  -std=c++11 $(INCLUDES)
+CXXFLAGS = -Wall -c -Wextra -pedantic  -std=c++14 $(INCLUDES)
 
 ifeq ($(config),debug)
 	CXXFLAGS += -g
