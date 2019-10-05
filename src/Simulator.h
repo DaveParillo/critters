@@ -120,7 +120,7 @@ class Simulator {
      * @param p the position where this critter currently resides
      * @param it a reference to the critter
      */
-    void  update           (const Point& p, shared_ptr<Critter> it);
+    void  update           (const Point& p, const shared_ptr<Critter>& it);
     /**
      * Determine whether a critter is allowed to move.
      * @param p the position where this critter currently resides (origin position)
@@ -128,7 +128,7 @@ class Simulator {
      * @param move_dir The direction the critter wants to move
      * @return true if it can move from its origin to its desired destination
      */
-    bool  can_move         (const Point& p, shared_ptr<Critter> it, const Direction move_dir);
+    bool  can_move         (const Point& p, const shared_ptr<Critter>& it, const Direction& move_dir);
     /**
      * Move a critter.
      * Movement is according to instructions received by the critter.
@@ -137,7 +137,7 @@ class Simulator {
      * @param it a reference to the critter
      * @param move_dir The direction the critter wants to move
      */
-    void  move             (const Point& p, shared_ptr<Critter> it, const Direction move_dir);
+    void  move             (const Point& p, const shared_ptr<Critter>& it, const Direction& move_dir);
 
     /**
      * Move a critter from a source point to a destination.
@@ -150,25 +150,25 @@ class Simulator {
     void  move             (const Point& src, const Point& dest);
     /**
      * Controller for all non-movement actions taken by a critter (fight, mate, etc).
-     * @param p the position where this critter currently resides (origin position)
+     * @param src the position where this critter currently resides (origin position)
      * @param it a reference to the critter
      * @param dest the destintation position
      */
-    void  take_action      (const Point& p, shared_ptr<Critter> it, const Point& dest);
+    void  take_action      (const Point& src, shared_ptr<Critter> it, const Point& dest);
     /**
      * Controller what happens when a critter moves onto a tile containing food.
-     * @param p the position where this critter currently resides (origin position)
+     * @param src the position where this critter currently resides (origin position)
      * @param it a reference to the critter
      * @param dest the destination postion
      */
-    void  process_food     (const Point& p, shared_ptr<Critter> it, const Point& dest);
+    void  process_food     (const Point& src, shared_ptr<Critter> it, const Point& dest);
     /**
      * Determine whether a critter is allowed to mate.
      * @param src_it a reference to the critter initiating the mating
      * @param dest_it a reference to the receiving critter 
      * @return true if src_it and dest_it can mate
      */
-    bool  can_mate         (shared_ptr<Critter> src_it, shared_ptr<Critter> dest_it); 
+    bool  can_mate         (const shared_ptr<Critter>& src_it, const shared_ptr<Critter>& dest_it); 
 
     /**
      * Controller what happens when a critter moves onto a tile containing a mate.
@@ -190,8 +190,8 @@ class Simulator {
      * @param dest_it a reference to the opponent
      * @return true if src_it can fight
      */
-    bool  can_fight        (const Point& src,  shared_ptr<Critter> src_it, 
-                            const Point& dest, shared_ptr<Critter> dest_it); 
+    bool  can_fight        (const Point& src,  const shared_ptr<Critter>& src_it, 
+                            const Point& dest, const shared_ptr<Critter>& dest_it); 
 
     /**
      * Controller what happens when a critter moves onto a tile containing food.
