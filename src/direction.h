@@ -1,17 +1,17 @@
-#ifndef DIRECTION_H
-#define DIRECTION_H
+#ifndef MESA_CRITTERS_DIRECTION_H
+#define MESA_CRITTERS_DIRECTION_H
 
 #include <array>
 #include <map>
 
 /**
- * @class Direction
- * Defines the direction that a moving Critter is allowed to travel.
+ * @class direction
+ * Defines the direction that a moving critter is allowed to travel.
  *
- * - Increasing south moves a Critter down
- * - Increasing west moves a Critter right
+ * - Increasing south moves a critter down
+ * - Increasing west moves a critter right
  */
-enum class Direction {
+enum class direction {
   CENTER,                 /*!< No movement. */
   NORTH,                  /*!< Move one cell up. */
   NORTH_EAST,             /*!< Move one cell up and to the right. */
@@ -31,7 +31,7 @@ enum class Direction {
  * @param rhs reference to the Direction
  * @return the modified output stream
  */
-std::ostream& operator<<(std::ostream& os, const Direction& rhs);
+std::ostream& operator<<(std::ostream& os, const direction& rhs);
 
 
 /**
@@ -43,19 +43,18 @@ std::ostream& operator<<(std::ostream& os, const Direction& rhs);
  *    }
  * @see Simulator::get_neighbors
  */
-const std::array<Direction,8> directions = 
+const std::array<direction,8> directions = 
 {
   {
-    Direction::NORTH,
-    Direction::NORTH_EAST,
-    Direction::EAST,     
-    Direction::SOUTH_EAST,
-    Direction::SOUTH,    
-    Direction::SOUTH_WEST,
-    Direction::WEST,     
-    Direction::NORTH_WEST
+    direction::NORTH,
+    direction::NORTH_EAST,
+    direction::EAST,     
+    direction::SOUTH_EAST,
+    direction::SOUTH,    
+    direction::SOUTH_WEST,
+    direction::WEST,     
+    direction::NORTH_WEST
   }
 };
-
 
 #endif

@@ -1,13 +1,14 @@
-#pragma once
+#ifndef MESA_CRITTERS_COLOR_H
+#define MESA_CRITTERS_COLOR_H
 
 #include <array>
 #include <iosfwd>
 #include <string>
 
 /**
- * @class Color
+ * @class color
  * Defines the colors used to color dritters in the sim.
- * Color definitonis are currently using the "lowest common denominator", that is 8.
+ * Color definitons are currently using the "lowest common denominator", that is 8.
  * Color in the sim is defined abstractly, that is a color <em>type</em>
  * is defined, but it is up to each View to actually implement color using whatever
  * mechanisms exist for the view implementation.
@@ -17,7 +18,7 @@
  *
  * whereas SDL defines color using an object.
  */
-enum class Color {
+enum class color {
   BLACK,
   RED,
   GREEN,
@@ -31,29 +32,27 @@ enum class Color {
 /**
  * An array container for the colors
  */
-const std::array<Color,8> colors = 
+const std::array<color,8> colors = 
 {
   {
-    Color::BLACK,
-    Color::RED,
-    Color::GREEN,     
-    Color::BLUE,
-    Color::YELLOW,    
-    Color::MAGENTA,
-    Color::CYAN,     
-    Color::WHITE
+    color::BLACK,
+    color::RED,
+    color::GREEN,     
+    color::BLUE,
+    color::YELLOW,    
+    color::MAGENTA,
+    color::CYAN,     
+    color::WHITE
   }
 };
 
-
-
 /**
- * Send text representation of a Color to an output stream.
+ * Extract a color to an output stream.
  *
  * @param os reference to an output stream
  * @param rhs reference to the Color
  * @return the modified output stream
  */
-std::ostream& operator<<(std::ostream& os, const Color& rhs);
+std::ostream& operator<<(std::ostream& os, const color& rhs);
 
-
+#endif

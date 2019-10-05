@@ -1,11 +1,10 @@
-#ifndef STONE_H
-#define STONE_H
+#ifndef MESA_CRITTERS_STONE_H
+#define MESA_CRITTERS_STONE_H
 
-#include <iostream>
 #include <memory>
 
-#include "Direction.h"
-#include "Critter.h"
+#include "direction.h"
+#include "critter.h"
 
 /**
  * A Stone is an obstacle in the game.
@@ -17,10 +16,10 @@
  * A stunned Critter immediately loses a fight against any other Critter
  * that attacks it while it is stunned.
  */
-class Stone : public Critter {
+class stone : public critter {
 
   public:
-    Stone() : Critter("Stone") { }
+    stone() : critter("Stone") { }
 
     /**
      * Rather than the default 'S', a Stone is represented as a '#'.
@@ -35,8 +34,8 @@ class Stone : public Critter {
      * Make a new Stone.
      * @return a shared pointer to a new Stone object.
      */
-    std::shared_ptr<Critter> create() override {
-      return std::make_shared<Stone>();
+    std::shared_ptr<critter> create() override {
+      return std::make_shared<stone>();
     }
 };
 

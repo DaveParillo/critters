@@ -1,15 +1,15 @@
-#ifndef VIEWCURSES_H
-#define VIEWCURSES_H
+#ifndef MESA_CRITTERS_VIEW_CURSES_H
+#define MESA_CRITTERS_VIEW_CURSES_H
 #include <iostream>
 #include <string>
 #include <unordered_map>
 #include <ncurses.h>
 
-#include "Color.h"
-#include "Critter.h"
-#include "Point.h"
-#include "Species.h"
-#include "View.h"
+#include "color.h"
+#include "critter.h"
+#include "point.h"
+#include "species.h"
+#include "view.h"
 
 using std::map;
 using std::unordered_map;
@@ -21,12 +21,12 @@ using std::unique_ptr;
 /**
  * Defines an ncurses representation of the Critters world.
  */
-class ViewCurses : public View {
+class view_curses : public view {
   public:
     /**
      * Init the ncurses environment.
      */
-    ViewCurses() 
+    view_curses() 
     {
       setup();
     }
@@ -36,7 +36,7 @@ class ViewCurses : public View {
      * @param height the desired height of the world
      * @param width the desired width of the world
      */
-    ViewCurses(const int height, const int width) 
+    view_curses(const int height, const int width) 
       : world_ht(height)
         , score_ht(10)
         , world_wd(width)
@@ -48,7 +48,7 @@ class ViewCurses : public View {
     /**
      * Destroy the ncurses environment.
      */
-    ~ViewCurses() {
+    ~view_curses() {
       teardown();
     }
 
@@ -57,16 +57,16 @@ class ViewCurses : public View {
      * @param p the location on the world screen
      * @param it an entity to draw.
      */
-    void draw(const Point& p, const shared_ptr<Critter> it) const override;
+    void draw(const point& p, const shared_ptr<critter> it) const override;
 
-    void redraw(const unordered_map<Point,  shared_ptr<Critter>> tiles) override {
+    void redraw(const unordered_map<point,  shared_ptr<critter>> tiles) override {
       assert (tiles.size() > 0);
     }
 
     /**
      * @copydoc View::update_score()
      */
-    void update_score(const map<string, shared_ptr<Species>> players) override;
+    void update_score(const map<string, shared_ptr<species>> players) override;
     /**
      * @copydoc View::update_time()
      */
@@ -138,7 +138,7 @@ class ViewCurses : public View {
      * @return the ncurses COLOR_PAIR index associated with the color used.
      *         All the color pairs are defined in setup_colors()
      */
-    int  set_color(const shared_ptr<Critter> it) const;
+    int  set_color(const shared_ptr<critter> it) const;
     /**
      * Apply any mods to a color based on the current state of a critter
      *
@@ -146,7 +146,7 @@ class ViewCurses : public View {
      * @param it the critter
      * @return the ncurses COLOR_PAIR index associated with the color used.
      */
-    int  adjust_color(const int color, const shared_ptr<Critter> it) const;
+    int  adjust_color(const int color, const shared_ptr<critter> it) const;
 
     /**
      * Reset the ncurses color environment back to its defaults.

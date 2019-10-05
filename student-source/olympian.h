@@ -19,20 +19,20 @@
 #include <iostream>
 #include <memory>
 
-#include "Direction.h"
-#include "Critter.h"
+#include <direction.h>
+#include <critter.h>
 
 /**
  * A stub for a future player.
  * In it's current state, this critter should be named 'Lunch'.
  */
-class Olympian : public Critter {
+class olympian : public critter {
 
   public:
     /**
      * Create a new critter named "Olympian"
      */
-    Olympian() : Critter("Olympian") { }
+    olympian() : critter("Olympian") { }
 
     /**
      * Inform the sim this critter is a competitor.
@@ -44,17 +44,18 @@ class Olympian : public Critter {
     /**
      * Inform the sim of the color of this critter.
      * @return the color of this critter.
+     * @see the Color enum for a list of available colors.
      */
-    Color  color()   const override { return Color::RED; }
+    color  color()   const override { return color::RED; }
 
 
 
     /**
      * Make a new Olympian.
-     * @return a shared pointer to a new Olympian object.
+     * @return a shared pointer to a new Olympian.
      */
-    std::shared_ptr<Critter> create() override {
-      return std::make_shared<Olympian>();
+    std::shared_ptr<critter> create() override {
+      return std::make_shared<olympian>();
     }
 };
 

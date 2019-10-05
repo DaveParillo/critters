@@ -1,15 +1,17 @@
-#pragma once
+#ifndef MESA_CRITTERS_SPECIES_H
+#define MESA_CRITTERS_SPECIES_H
 
-#include <iostream>
+#include <iosfwd>
 #include <string>
-#include "Critter.h"
+
+#include "critter.h"
 
 using std::string;
 
 /**
- * Stores summary statistics for a set of Critters.
+ * Stores summary statistics for a set of critters.
  */
-class Species {
+class species {
   private:
     string       _name;           /**< Name of this species */
     unsigned int num_alive;       /**< Total number of living critters. */
@@ -21,7 +23,7 @@ class Species {
     /**
      * The default constructor is private to prevent creating a Species without a name.
      */
-    Species() {}
+    species() {}
 
   public:
     /**
@@ -30,7 +32,7 @@ class Species {
      *        by the simulator and passed to the View.
      * @param initial_pop the starting population.
      */
-    Species(string species_name, unsigned int initial_pop) : 
+    species(string species_name, unsigned int initial_pop) : 
       _name(species_name), num_alive(initial_pop), 
       num_dead(0), num_kills(0), num_feedings(0), num_starved(0) {}
 
@@ -110,7 +112,6 @@ class Species {
  * @param s reference to a Species to print
  * @return the modified output stream
  */
-std::ostream& operator<<(std::ostream& os, const Species& s);
+std::ostream& operator<<(std::ostream& os, const species& s);
 
-
-
+#endif

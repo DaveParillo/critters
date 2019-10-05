@@ -1,19 +1,19 @@
 
 #include "add_players.h"
 // default players
-#include "solutions/Bear.h"
-#include "solutions/Lion.h"
-#include "solutions/Tiger.h"
-#include "solutions/Raccoon.h"
-#include "solutions/Wombat.h"
-#include "solutions/Duck.h"
+#include "solutions/bear.h"
+#include "solutions/lion.h"
+#include "solutions/tiger.h"
+#include "solutions/raccoon.h"
+#include "solutions/wombat.h"
+#include "solutions/duck.h"
 // non player entities
-#include "Food.h"
-#include "Stone.h"
+#include "food.h"
+#include "stone.h"
 
-#include "Simulator.h"
-#include "View.h"
-#include "ViewCurses.h"
+#include "game.h"
+#include "view.h"
+#include "view_curses.h"
 #include <iostream>
 #include <memory>
 #include <string>
@@ -115,19 +115,19 @@ int main(int argc, char** argv) {
     }
   }
 
-  Simulator s;
+  game s;
 
-  s.set_view(std::unique_ptr<View>(new ViewCurses(x, y)));
+  s.set_view(std::unique_ptr<view>(new ViewCurses(x, y)));
   s.set_debug(debug);
-  s.addItem(make_shared<Stone>(),     max_stones);
-  s.addItem(make_shared<Food>(),      max_food);
+  s.addItem(make_shared<stone>(),     max_stones);
+  s.addItem(make_shared<food>(),      max_food);
 
-  if (use_bear)     s.addItem(make_shared<Bear>(),    max_critters);
-  if (use_lion)     s.addItem(make_shared<Lion>(),    max_critters);
-  if (use_tiger)    s.addItem(make_shared<Tiger>(),   max_critters);
-  if (use_raccoon)  s.addItem(make_shared<Raccoon>(), max_critters);
-  if (use_wombat)   s.addItem(make_shared<Wombat>(),  max_critters);
-  if (use_duck)     s.addItem(make_shared<Duck>(),    max_critters);
+  if (use_bear)     s.addItem(make_shared<bear>(),    max_critters);
+  if (use_lion)     s.addItem(make_shared<lion>(),    max_critters);
+  if (use_tiger)    s.addItem(make_shared<tiger>(),   max_critters);
+  if (use_raccoon)  s.addItem(make_shared<raccoon>(), max_critters);
+  if (use_wombat)   s.addItem(make_shared<wombat>(),  max_critters);
+  if (use_duck)     s.addItem(make_shared<duck>(),    max_critters);
 
   for (const auto& p: add_players()) {
     s.addItem(p,  max_critters);

@@ -1,9 +1,9 @@
 #include <cstdint>
 
-#include "Direction.h"
-#include "Point.h"
+#include "direction.h"
+#include "point.h"
 
-Point Point::translate(const Point& p, const Direction& movement, 
+point point::translate(const point& p, const direction& movement, 
                        const int16_t max_x, const int16_t max_y) const {
   auto x     = p.x();
   auto y     = p.y();
@@ -13,39 +13,39 @@ Point Point::translate(const Point& p, const Direction& movement,
   auto west  = (p.x() == 0? max_x-1: p.x()-1);
 
   switch (movement) {
-    case Direction::NORTH:
+    case direction::NORTH:
       y = north;
       break;
-    case Direction::NORTH_EAST:
+    case direction::NORTH_EAST:
       y = north;
       x = east;
       break;
-    case Direction::EAST:
+    case direction::EAST:
       x = east;
       break;
-    case Direction::SOUTH_EAST:
+    case direction::SOUTH_EAST:
       y = south;
       x = east;
       break;
-    case Direction::SOUTH:
+    case direction::SOUTH:
       y = south;
       break;
-    case Direction::SOUTH_WEST:
+    case direction::SOUTH_WEST:
       y = south;
       x = west;
       break;
-    case Direction::WEST:
+    case direction::WEST:
       x = west;
       break;
-    case Direction::NORTH_WEST:
+    case direction::NORTH_WEST:
       y = north;
       x = west;
       break;
-    case Direction::CENTER: // no change in position [[fallthrough]]
+    case direction::CENTER: // no change in position [[fallthrough]]
     default:
       break;
   }
-  return Point {x, y};
+  return point {x, y};
 }
 
 

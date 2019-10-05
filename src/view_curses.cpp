@@ -2,10 +2,10 @@
 #include <string>
 #include <vector>
 
-#include "Color.h"
-#include "ViewCurses.h"
+#include "color.h"
+#include "view_curses.h"
 
-void ViewCurses::setup() {
+void view_curses::setup() {
   // init ncurses
   initscr();
   nodelay(stdscr, true); // have getch not wait for user keypress
@@ -22,14 +22,14 @@ void ViewCurses::setup() {
 }
 
 
-void ViewCurses::hide_help() {
+void view_curses::hide_help() {
   delwin(help);
   touchwin(world);
   wrefresh(world);
   touchwin(score);
   wrefresh(score);
 }
-void ViewCurses::show_help() {
+void view_curses::show_help() {
   auto ht = std::min (8, maxheight/2);
   help = newwin(ht, maxwidth/2, maxheight/4, maxwidth/4);
   wbkgd(help, COLOR_PAIR(1));
@@ -45,23 +45,23 @@ void ViewCurses::show_help() {
   wrefresh(help);
 }
 
-char ViewCurses::get_key()  {
+char view_curses::get_key()  {
   return getch();
 }
 
-void ViewCurses::update_time(const unsigned long tick) {
+void view_curses::update_time(const unsigned long tick) {
   mvwprintw(score, score_ht-1, 9, "      ");
   mvwprintw(score, score_ht-1, 9, std::to_string(tick).c_str());
   wrefresh(score);
 }
 
-void ViewCurses::update_score(const map<string, shared_ptr<Species>> players) {
-  std::vector<shared_ptr<Species>> dudes;
+void view_curses::update_score(const map<string, shared_ptr<species>> players) {
+  std::vector<shared_ptr<species>> dudes;
   for (auto& p: players) {
     dudes.push_back(p.second);
   }
   std::sort(dudes.begin(), dudes.end(), 
-      [](shared_ptr<Species> a, shared_ptr<Species> b) {
+      [](shared_ptr<species> a, shared_ptr<species> b) {
         return b->score() < a->score();   
       });
 
@@ -89,7 +89,7 @@ void ViewCurses::update_score(const map<string, shared_ptr<Species>> players) {
 
 // each cell in ncurses is shaded using a 'color pair'
 // a foreground and a background color assigned to an int value
-void ViewCurses::setup_colors() const {
+void view_curses::setup_colors() const {
   init_pair(1,COLOR_WHITE, COLOR_BLUE);   // used for score area
 
   // 'normal' colors
@@ -118,7 +118,7 @@ void ViewCurses::setup_colors() const {
   init_pair(28,COLOR_CYAN, COLOR_RED);
 }
 
-int ViewCurses::adjust_color(const int color, const shared_ptr<Critter> it) const {
+int view_curses::adjust_color(const int color, const shared_ptr<critter> it) const {
   auto c = color;
   if (it->is_asleep()) c += 10;
   if (it->is_mating()) c += 20;
@@ -126,28 +126,28 @@ int ViewCurses::adjust_color(const int color, const shared_ptr<Critter> it) cons
   return c;
 }
 
-int ViewCurses::set_color(const shared_ptr<Critter> it) const {
+int view_curses::set_color(const shared_ptr<critter> it) const {
   int color;
   switch (it->color()) {
-    case Color::WHITE:
+    case color::WHITE:
       color = 2;
       break;
-    case Color::RED:
+    case color::RED:
       color = 3;
       break;
-    case Color::GREEN:
+    case color::GREEN:
       color = 4;
       break;
-    case Color::BLUE:
+    case color::BLUE:
       color = 5;
       break;
-    case Color::YELLOW:
+    case color::YELLOW:
       color = 6;
       break;
-    case Color::MAGENTA:
+    case color::MAGENTA:
       color = 7;
       break;
-    case Color::CYAN:
+    case color::CYAN:
       color = 8;
       break;
     default:
@@ -160,14 +160,14 @@ int ViewCurses::set_color(const shared_ptr<Critter> it) const {
   return color;
 }
 
-void ViewCurses::unset_color(const int color) const {
+void view_curses::unset_color(const int color) const {
   wattroff(world, COLOR_PAIR(color));
 }
 
 
 
 
-void ViewCurses::setup_score() {
+void view_curses::setup_score() {
   if (score_wd == 0) {
     score = newwin(score_ht, maxwidth, 0, 0);
   } else {
@@ -202,7 +202,7 @@ void ViewCurses::setup_score() {
 
 }
 
-void ViewCurses::setup_world() {
+void view_curses::setup_world() {
   if (world_wd == 0) {
     world = newwin(maxheight - score_ht, maxwidth, score_ht, 0);
   } else {
@@ -214,7 +214,7 @@ void ViewCurses::setup_world() {
 }
 
 
-void ViewCurses::teardown() {
+void view_curses::teardown() {
   nodelay(stdscr, false);
   getch();
   delwin(world);
@@ -222,7 +222,7 @@ void ViewCurses::teardown() {
   endwin();
 }
 
-void ViewCurses::draw(const Point& p, const std::shared_ptr<Critter>  it) const {
+void view_curses::draw(const point& p, const std::shared_ptr<critter>  it) const {
   wmove(world, p.y(), p.x());
   auto c = set_color(it);
   waddch(world,it->glyph());

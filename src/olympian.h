@@ -1,11 +1,11 @@
 /*
- * Olympian.h
+ * olympian.h
  *
- * To make your own custom Olympian, follow these steps.
+ * To make your own custom olympian, follow these steps.
  *
  * 1. Copy this file to a name based on the name of your critter
  *
- * 2. In this file, replace all occurrences of Olympian with 
+ * 2. In this file, replace all occurrences of olympian with
  *    Feel free to be creative, 
  *    but recall class names and identifiers cannot contain spaces.
  *
@@ -14,25 +14,27 @@
  *
  */
 
-#pragma once
+#ifndef MESA_CRITTERS_OLYMPIAN_H
+#define MESA_CRITTERS_OLYMPIAN_H
 
 #include <iostream>
 #include <memory>
 
-#include <Direction.h>
-#include <Critter.h>
+#include "critter.h"
+#include "direction.h"
+
 
 /**
  * A stub for a future player.
  * In it's current state, this critter should be named 'Lunch'.
  */
-class Olympian : public Critter {
+class olympian : public critter {
 
   public:
     /**
      * Create a new critter named "Olympian"
      */
-    Olympian() : Critter("Olympian") { }
+    olympian() : critter("Olympian") { }
 
     /**
      * Inform the sim this critter is a competitor.
@@ -44,19 +46,18 @@ class Olympian : public Critter {
     /**
      * Inform the sim of the color of this critter.
      * @return the color of this critter.
-     * @see the Color enum for a list of available colors.
      */
-    Color  color()   const override { return Color::RED; }
+    enum color  color()   const override { return color::RED; }
 
 
 
     /**
      * Make a new Olympian.
-     * @return a shared pointer to a new Olympian.
+     * @return a shared pointer to a new Olympian object.
      */
-    std::shared_ptr<Critter> create() override {
-      return std::make_shared<Olympian>();
+    std::shared_ptr<critter> create() override {
+      return std::make_shared<olympian>();
     }
 };
 
-
+#endif

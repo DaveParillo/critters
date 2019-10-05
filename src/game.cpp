@@ -3,14 +3,16 @@
 #include <cstdint>
 #include <chrono>
 #include <iostream>
+#include <memory>
 #include <random>
 #include <thread>
 #include <utility>
 #include <unistd.h>
 
-#include "Simulator.h"
-#include "Food.h"
-#include "ViewCurses.h"
+#include "game.h"
+#include "food.h"
+#include "view.h"
+#include "view_curses.h"
 
 using std::this_thread::sleep_for;
 using std::shared_ptr;
@@ -20,16 +22,16 @@ namespace {
   std::default_random_engine gen(r());
 } // end anonymous namespace
 
-void Simulator::set_debug(int debug_level) {
+void game::set_debug(int debug_level) {
   debug = debug_level;
 }
-void Simulator::set_view(std::unique_ptr<View> v) {
+void game::set_view(std::unique_ptr<view> v) {
   assert (v != nullptr);
   view = std::move(v);
   init_tiles();
 }
 
-void Simulator::start() {
+void game::start() {
   bool play = false;
   bool help = false;
   int delay = 1000;
@@ -64,7 +66,7 @@ void Simulator::start() {
   }
 }
 
-bool Simulator::lone_species() {
+bool game::lone_species() {
   auto count = 0;
   for (const auto& p : players) {
     if (p.second->alive() > 0) ++count;
@@ -72,7 +74,7 @@ bool Simulator::lone_species() {
   return count <= 1;
 }
 
-void Simulator::update_tiles() {
+void game::update_tiles() {
   for (const auto& t : tiles) {
     if (t.second->is_player()) {
       update(t.first, t.second);
@@ -84,19 +86,19 @@ void Simulator::update_tiles() {
   view->redraw(tiles);
 }
 
-void Simulator::init_tiles() {
+void game::init_tiles() {
   assert(tiles.empty());
   if (debug != 0) std::cerr << "height: " << view->height() << ", width: " << view->width() << "\n";
   for (int16_t x=0; x<=view->width()-1; ++x) {
     for (int16_t y=0; y<=view->height()-1; ++y) {
-      Point p = {x, y};
+      point p = {x, y};
       tiles[p] = blank_tile;
       blanks[p] = blank_tile;
     }
   }
 }
 
-void Simulator::update (const Point& p, const shared_ptr<Critter>& it) {
+void game::update (const point& p, const shared_ptr<critter>& it) {
   if (it->updated()) return;
 
   it->set_update(true);
@@ -118,11 +120,11 @@ void Simulator::update (const Point& p, const shared_ptr<Critter>& it) {
 
     auto neighbors = get_neighbors(p);
     auto move_dir = it->move(neighbors);
-    if (move_dir < Direction::CENTER || move_dir > Direction::NORTH_WEST) move_dir = Direction::CENTER;
+    if (move_dir < direction::CENTER || move_dir > direction::NORTH_WEST) move_dir = direction::CENTER;
     if (can_move(p, it, move_dir)) {
       move (p, it, move_dir);
     } else {
-      if (move_dir != Direction::CENTER) {
+      if (move_dir != direction::CENTER) {
         auto dest = p.translate(p, move_dir, view->width(),view->height());
         take_action(p, it, dest);
       } else {
@@ -135,9 +137,9 @@ void Simulator::update (const Point& p, const shared_ptr<Critter>& it) {
 }
 
 
-bool Simulator::can_move (const Point& p, const shared_ptr<Critter>& it, const Direction& move_dir) {
+bool game::can_move (const point& p, const shared_ptr<critter>& it, const direction& move_dir) {
   if (it->wait_remaining() != 0u)    return false;
-  if (move_dir == Direction::CENTER) return false;
+  if (move_dir == direction::CENTER) return false;
 
   if (debug != 0) std::cerr << "Can " << it->name() << " at " << p <<  " move?\n";
 
@@ -145,7 +147,7 @@ bool Simulator::can_move (const Point& p, const shared_ptr<Critter>& it, const D
   return tiles[tmp] == blank_tile;
 }
 
-void Simulator::move (const Point& p, const shared_ptr<Critter>& it, const Direction& move_dir) {
+void game::move (const point& p, const shared_ptr<critter>& it, const direction& move_dir) {
   if (debug != 0) std::cerr << "Get move from  " << it->name() << "\n";
   auto new_posit = p.translate(p, move_dir, view->width(),view->height());
   assert(new_posit != p);
@@ -158,7 +160,7 @@ void Simulator::move (const Point& p, const shared_ptr<Critter>& it, const Direc
 }
 
 
-void Simulator::move (const Point& src, const Point& dest) {
+void game::move (const point& src, const point& dest) {
   assert (src != dest);
   assert (tiles[dest] == blank_tile || tiles[dest]->name() == "Food");
   if (debug != 0) std::cerr << "moving from " << src << " to " << dest << "\n";
@@ -168,9 +170,9 @@ void Simulator::move (const Point& src, const Point& dest) {
 }
 
 
-std::map<Direction,  shared_ptr<Critter>>
-Simulator::get_neighbors(const Point& p) {
-  std::map<Direction, shared_ptr<Critter>> neighbors;
+std::map<direction,  shared_ptr<critter>>
+game::get_neighbors(const point& p) {
+  std::map<direction, shared_ptr<critter>> neighbors;
 
   for (auto& dir: directions) {
     auto new_posit = p.translate(p, dir, view->width(),view->height());
@@ -185,7 +187,7 @@ Simulator::get_neighbors(const Point& p) {
   return neighbors;
 }
 
-void Simulator::take_action (const Point& src, shared_ptr<Critter> src_it, const Point& dest) {
+void game::take_action (const point& src, shared_ptr<critter> src_it, const point& dest) {
   if (debug != 0) std::cerr << "taking action for " << src_it->name() << " at " << src << "\n";
 
   auto dest_it = tiles[dest];
@@ -213,7 +215,7 @@ void Simulator::take_action (const Point& src, shared_ptr<Critter> src_it, const
 
 }
 
-void Simulator::process_food(const Point& src,  shared_ptr<Critter> src_it, const Point& dest)   {
+void game::process_food(const point& src,  shared_ptr<critter> src_it, const point& dest)   {
   if (src_it->eat()) {
     if (debug != 0) std::cerr << src_it->name() << " at " << src << " is eating and has "
       << src_it->food_remaining() << " food remaining.\n";
@@ -230,14 +232,14 @@ void Simulator::process_food(const Point& src,  shared_ptr<Critter> src_it, cons
     auto food = std::next(std::begin(tiles), std::uniform_int_distribution<int> {0, int(tiles.size())} (gen));
     auto p = std::get<0>(*food);
     if (tiles[p] == blank_tile) {
-      tiles[p] = std::make_shared<Food>();
+      tiles[p] = std::make_shared<food>();
       view->draw(p, tiles[p]);
     }
   }
 
 }
 
-bool Simulator::can_mate (const shared_ptr<Critter>& src_it, const shared_ptr<Critter>& dest_it)  {
+bool game::can_mate (const shared_ptr<critter>& src_it, const shared_ptr<critter>& dest_it)  {
   if (src_it->name() != dest_it->name()) return false;
   if (src_it->is_baby() || dest_it->is_baby()) return false;
 
@@ -245,17 +247,17 @@ bool Simulator::can_mate (const shared_ptr<Critter>& src_it, const shared_ptr<Cr
 
 }
 
-void Simulator::process_mate(const Point& src,  shared_ptr<Critter> src_it, const Point& dest, shared_ptr<Critter> dest_it)   {
+void game::process_mate(const point& src,  shared_ptr<critter> src_it, const point& dest, shared_ptr<critter> dest_it)   {
 
   auto neighbors = get_neighbors(src);
-  Direction dir = Direction::CENTER;
+  direction dir = direction::CENTER;
   // find empty neightbor to put baby
   for (int i=0; i<8; ++i) {
     if ("Empty" == neighbors[directions[i]]->name()) {
       dir = directions[i];
     }
   }
-  if (dir == Direction::CENTER) {
+  if (dir == direction::CENTER) {
     if(debug != 0)    std::cerr << "Could not find a place to have baby.\n";
   } else {
     auto b_dest = src.translate(src, dir, view->width(),view->height());
@@ -272,8 +274,8 @@ void Simulator::process_mate(const Point& src,  shared_ptr<Critter> src_it, cons
   }
 }
 
-bool Simulator::can_fight (const Point& src,  const shared_ptr<Critter>& src_it,
-                           const Point& dest, const shared_ptr<Critter>& dest_it)  {
+bool game::can_fight (const point& src,  const shared_ptr<critter>& src_it,
+                           const point& dest, const shared_ptr<critter>& dest_it)  {
   if (src_it->wait_remaining() > 0) return false;
 
   if (dest_it == blank_tile) return false;
@@ -285,8 +287,8 @@ bool Simulator::can_fight (const Point& src,  const shared_ptr<Critter>& src_it,
   return dest_it->is_player();
 }
 
-void Simulator::process_fight(const Point& src,  shared_ptr<Critter> src_it,
-    const Point& dest, shared_ptr<Critter> dest_it)   {
+void game::process_fight(const point& src,  shared_ptr<critter> src_it,
+    const point& dest, shared_ptr<critter> dest_it)   {
   auto results = fight_results(src_it, dest_it);
 
   if(!dest_it->is_player()) {
@@ -303,14 +305,14 @@ void Simulator::process_fight(const Point& src,  shared_ptr<Critter> src_it,
   //if the attacker loses, it is removed & the defender stays put.
   //On a draw, nothing else happens
 
-  if (results == Simulator::AttackResults::ATTACKER) {
+  if (results == game::AttackResults::ATTACKER) {
     if (debug != 0) std::cerr << src_it->name() << " won \n";
     tiles[dest] = blank_tile;
     view->draw(dest, tiles[dest]);
     if (debug != 0) std::cerr << "move after victory \n";
     move(src,dest);
     update_kill_stats(src_it, dest_it);
-  } else if (results == Simulator::AttackResults::DEFENDER) {
+  } else if (results == game::AttackResults::DEFENDER) {
     if (debug != 0) std::cerr << dest_it->name() << " won \n";
     tiles[src] = blank_tile;
     view->draw(src, tiles[src]);
@@ -322,33 +324,33 @@ void Simulator::process_fight(const Point& src,  shared_ptr<Critter> src_it,
   }
 }
 
-Simulator::AttackResults
-Simulator::fight_results (shared_ptr<Critter> attacker,
-    shared_ptr<Critter> defender) {
+game::AttackResults
+game::fight_results (shared_ptr<critter> attacker,
+    shared_ptr<critter> defender) {
   if (defender->is_asleep() || defender->is_mating()) {
-    return Simulator::AttackResults::ATTACKER;
+    return game::AttackResults::ATTACKER;
   }
-  using Attack = Critter::Attack;
+  using Attack = critter::attack;
   auto a_attack = attacker->fight(defender->name());
   auto d_attack = defender->fight(attacker->name());
   if (a_attack < Attack::ROAR || a_attack > Attack::SCRATCH) a_attack = Attack::FORFEIT;
   if (d_attack < Attack::ROAR || d_attack > Attack::SCRATCH) d_attack = Attack::FORFEIT;
 
   if (a_attack == d_attack) {
-    return Simulator::AttackResults::DRAW;
+    return game::AttackResults::DRAW;
   }
 
-  if ((a_attack == Critter::Attack::ROAR    && d_attack == Critter::Attack::SCRATCH) ||
-      (a_attack == Critter::Attack::POUNCE  && d_attack == Critter::Attack::ROAR) ||
-      (a_attack == Critter::Attack::SCRATCH && d_attack == Critter::Attack::POUNCE) ||
-       d_attack == Critter::Attack::FORFEIT) {
-    return Simulator::AttackResults::ATTACKER;
+  if ((a_attack == critter::attack::ROAR    && d_attack == critter::attack::SCRATCH) ||
+      (a_attack == critter::attack::POUNCE  && d_attack == critter::attack::ROAR) ||
+      (a_attack == critter::attack::SCRATCH && d_attack == critter::attack::POUNCE) ||
+       d_attack == critter::attack::FORFEIT) {
+    return game::AttackResults::ATTACKER;
   }
 
-  return Simulator::AttackResults::DEFENDER;
+  return game::AttackResults::DEFENDER;
 }
 
-void Simulator::update_kill_stats(shared_ptr<Critter> winner, shared_ptr<Critter> loser) {
+void game::update_kill_stats(shared_ptr<critter> winner, shared_ptr<critter> loser) {
   players[winner->name()]->add_kill();
   if (debug != 0) std::cerr << winner->name() << " gets a kill \n";
   if (debug != 0) std::cerr << players[winner->name()];
@@ -360,9 +362,9 @@ void Simulator::update_kill_stats(shared_ptr<Critter> winner, shared_ptr<Critter
   loser->lost();            // report status
 }
 
-void Simulator::addItem(shared_ptr<Critter> item, const int num_items) {
+void game::addItem(shared_ptr<critter> item, const int num_items) {
   assert(item != nullptr);
-  typedef std::unordered_map<Point,shared_ptr<Critter>>::value_type tile_type;
+  typedef std::unordered_map<point,shared_ptr<critter>>::value_type tile_type;
 
   int free = count_if(tiles.begin(), tiles.end(), 
       [&](tile_type t) {
@@ -379,7 +381,7 @@ void Simulator::addItem(shared_ptr<Critter> item, const int num_items) {
 
   for (auto i = 0; i < num_items; ++i) {
     auto c = item->create();
-    Point p = get_random_blank_tile();
+    point p = get_random_blank_tile();
     assert(tiles[p] == blank_tile);
     tiles[p] = c;
     blanks.erase(p);
@@ -388,11 +390,11 @@ void Simulator::addItem(shared_ptr<Critter> item, const int num_items) {
 
   //add item to species set
   if (item->is_player()) {
-    players[item->name()] = std::make_shared<Species>(item->name(), num_items);
+    players[item->name()] = std::make_shared<species>(item->name(), num_items);
   }
 }
 
-Point Simulator::get_random_blank_tile() {
+point game::get_random_blank_tile() {
   auto random_it = std::next(std::begin(blanks), std::uniform_int_distribution<int> {0, int(blanks.size())} (gen));
   return std::get<0>(*random_it);
 }

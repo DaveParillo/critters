@@ -1,61 +1,48 @@
-#pragma once
+#ifndef MESA_CRITTERS_POINT_H
+#define MESA_CRITTERS_POINT_H
 
 #include <cstdint>
-#include <iostream>
 #include <functional>
+#include <iostream>
 #include <memory>
 
-#include "Direction.h"
+#include "direction.h"
 
 /**
  * Defines a single position in the Critter world.
  * Positions are organized in a traditional X-Y grid.
  */
-class Point {
-  private:
-    int16_t _x = 0;     /**< The x-coordinate of this position */
-    int16_t _y = 0;     /**< The y-coordinate of this position */
+struct point {
+    int16_t x = 0;     /**< The x-coordinate of this position */
+    int16_t y = 0;     /**< The y-coordinate of this position */
 
-  public:
     /**
      * Create a new point at a default location.
      */
-    Point() = default;
+    point() = default;
     /**
      * Create a new point at a specific location.
      */
-    Point(int16_t x, int16_t y)
-      : _x{x}, _y{y}
+    point(int16_t x, int16_t y)
+      : x{x}, y{y}
     {}
     
     /**
      * Point copy constructor.
      */
-    Point(const Point&) = default;
+    point(const point&) = default;
     /**
      * Point move constructor.
      */
-    Point(Point&&) = default;
+    point(point&&) = default;
     /**
      * Point copy assignment.
      */
-    Point& operator=(const Point&) = default;
+    point& operator=(const point&) = default;
     /**
      * Point move assignment.
      */
-    Point& operator=(Point&&) = default;
-
-
-    /**
-     * Get the X-coordinate of a Point.
-     * @return the current x-coordinate.
-     */
-    int16_t x() const { return _x; }
-    /**
-     * Get the Y-coordinate of a Point.
-     * @return the current y-coordinate.
-     */
-    int16_t y() const { return _y; }
+    point& operator=(point&&) = default;
 
     /**
      * Given a Point and Direction, calculate a new Point.
@@ -65,7 +52,7 @@ class Point {
      * @param max_y the limit on movement in the y direction.
      * @return the new Point
      */
-    Point translate(const Point& p, const Direction& movement,
+    point translate(const point& p, const direction& movement,
                     const int16_t max_x, const int16_t max_y) const;
 
 };
@@ -77,8 +64,9 @@ class Point {
  * @param rhs reference to the Point
  * @return the modified output stream
  */
-inline std::ostream& operator<<(std::ostream& os, const Point& rhs) {
-  return os << "(" << rhs.x() << "," << rhs.y() << ")";
+inline
+std::ostream& operator<<(std::ostream& os, const point& rhs) {
+  return os << "(" << rhs.x << "," << rhs.y << ")";
 }
 
 /**
@@ -87,8 +75,9 @@ inline std::ostream& operator<<(std::ostream& os, const Point& rhs) {
  * @param rhs the Point right operand
  * @return true if the coordinates of both points are equal.
  */
-inline bool operator==(const Point& lhs, const Point& rhs) {
-  return (lhs.x() == rhs.x() && lhs.y() == rhs.y());
+inline
+bool operator==(const point& lhs, const point& rhs) {
+  return (lhs.x == rhs.x && lhs.y == rhs.y);
 }
 
 /**
@@ -97,7 +86,8 @@ inline bool operator==(const Point& lhs, const Point& rhs) {
  * @param rhs the Point right operand
  * @return true if either coordinate between the two points differs.
  */
-inline bool operator!=(const Point& lhs, const Point& rhs) {
+inline
+bool operator!=(const point& lhs, const point& rhs) {
   return !operator==(lhs,rhs);
 }
 
@@ -107,8 +97,9 @@ inline bool operator!=(const Point& lhs, const Point& rhs) {
  * @param rhs the Point right operand
  * @return true if this point < rhs point
  */
-inline bool operator< (const Point& lhs, const Point& rhs) {
-  return (lhs.y() < rhs.y() || (lhs.y() == rhs.y() && lhs.x() < rhs.x()));
+inline
+bool operator< (const point& lhs, const point& rhs) {
+  return (lhs.y < rhs.y || (lhs.y == rhs.y && lhs.x < rhs.x));
 }
 
 
@@ -122,7 +113,7 @@ namespace std {
    * Add an overload to hash.
    */
   template <>
-    struct hash<Point>
+    struct hash<point>
     {
       /**
        * Return the hash code for a point.
@@ -131,19 +122,19 @@ namespace std {
        * @param p the Point to generate a hashcode for
        * @return the hashcode
        */
-      std::size_t operator()(const Point& p) const
+      std::size_t operator()(const point& p) const
       {
         using std::size_t;
         using std::hash;
         using std::string;
 
         return ((hash<int>()(719)
-              ^ (hash<int16_t>()(p.x()) << 1)) >> 1)
-              ^ (hash<int16_t>()(p.y()) << 1);
+              ^ (hash<int16_t>()(p.x) << 1)) >> 1)
+              ^ (hash<int16_t>()(p.y) << 1);
       }
     };
 
 }
 
-
+#endif
 

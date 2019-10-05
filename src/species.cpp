@@ -1,10 +1,10 @@
 #include <iostream>
 
-#include "Species.h"
+#include "species.h"
 
 using std::endl;
 
-std::ostream& operator<<(std::ostream& os, const Species& s) {
+std::ostream& operator<<(std::ostream& os, const species& s) {
   os << s.name() << " species:" << endl;
   os << "Alive: " << s.alive() << endl;
   os << "Dead: " << s.dead() << endl;

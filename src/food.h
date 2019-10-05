@@ -1,19 +1,19 @@
-#ifndef FOOD_H
-#define FOOD_H
+#ifndef MESA_CRITTERS_FOOD_H
+#define MESA_CRITTERS_FOOD_H
 
 #include <memory>
 
-#include "Direction.h"
-#include "Critter.h"
+#include "critter.h"
+#include "direction.h"
 
 /**
  * Food is consumed by player critters in the game.
  * Critters that move into food are fed for a fixed number of turns.
  */
-class Food : public Critter {
+class food : public critter {
 
   public:
-    Food() : Critter("Food") { }
+    food() : critter("Food") { }
 
     
     /**
@@ -29,8 +29,8 @@ class Food : public Critter {
      * Make more Food.
      * @return a shared pointer to a new Food object.
      */
-    std::shared_ptr<Critter> create() override {
-      return std::make_shared<Food>();
+    std::shared_ptr<critter> create() override {
+      return std::make_shared<food>();
     }
 };
 
