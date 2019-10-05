@@ -28,7 +28,7 @@ class Simulator {
      * Create a simulator.
      * Before being used, at a minimum the set_view method must be called to initialize a UI.
      */
-    Simulator();
+    Simulator() = default;
     /**
      * Start running the simulation.
      */
@@ -56,23 +56,23 @@ class Simulator {
     /** 
      * Process runtime keystrokes from users 
      */
-    char command;
+    char command = 'x';
     /** 
      * Determine if debugging output is enabled, and if it is, at
      * what level of verbosity, or what type of debug statements to produce.
      */
-    int  debug;
+    int  debug = 0;
 
     /**
      * The current move number.
      */
-    unsigned long tick;
+    unsigned long tick = 0;
     /**
      * A pointer to the main renderer of the simulation.
      * This object is a placeholder for adding other views (SDL, Swing)
      * at some future date.
      */
-    unique_ptr<View> view;
+    unique_ptr<View> view = nullptr;
     /**
      * Represent each valid position within the game world.
      * As far as tiles are concerned, everything is a 'critter',

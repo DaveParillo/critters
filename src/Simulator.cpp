@@ -15,10 +15,10 @@
 using std::this_thread::sleep_for;
 using std::shared_ptr;
 
-Simulator::Simulator() :
-  command('x'), debug(0), tick(0) {
-    srand(time(nullptr));
-  }
+namespace {
+  std::random_device r;
+  std::default_random_engine gen(r());
+} // end anonymous namespace
 
 void Simulator::set_debug(int debug_level) {
   debug = debug_level;
@@ -227,7 +227,7 @@ void Simulator::process_food(const Point& src,  shared_ptr<Critter> src_it, cons
     tiles[dest] = blank_tile;
     move(src,dest);
     // make more food somewhere else
-    auto food = std::next(std::begin(tiles), std::rand() % tiles.size());
+    auto food = std::next(std::begin(tiles), std::uniform_int_distribution<int> {0, int(tiles.size())} (gen));
     auto p = std::get<0>(*food);
     if (tiles[p] == blank_tile) {
       tiles[p] = std::make_shared<Food>();
@@ -393,7 +393,7 @@ void Simulator::addItem(shared_ptr<Critter> item, const int num_items) {
 }
 
 Point Simulator::get_random_blank_tile() {
-  auto random_it = std::next(std::begin(blanks), std::rand() % blanks.size());
+  auto random_it = std::next(std::begin(blanks), std::uniform_int_distribution<int> {0, int(blanks.size())} (gen));
   return std::get<0>(*random_it);
 }
 
