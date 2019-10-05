@@ -29,7 +29,8 @@ LIB_OBJS    := $(COMMON)
 all: $(EXE)
 
 $(LIB): $(LIB_OBJS)
-	$(CXX) -pie -shared -Wl,-E -o $(LIB) $(LIB_OBJS) $(LIBS)
+	# $(CXX) -pie -shared -Wl,-E -o $(LIB) $(LIB_OBJS) $(LIBS)
+	$(CXX) -pie -shared -o $(LIB) $(LIB_OBJS) $(LIBS)
 
 $(EXE): $(LIB) $(CRITTERS)
 	$(CXX) $(CXXFLAGS) $(CRITTERS) $< -L. $(LIB) $(LIBS) -o $@ 
