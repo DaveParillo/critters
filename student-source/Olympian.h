@@ -19,8 +19,8 @@
 #include <iostream>
 #include <memory>
 
-#include "Direction.h"
-#include "Critter.h"
+#include <Direction.h>
+#include <Critter.h>
 
 /**
  * A stub for a future player.
@@ -44,6 +44,7 @@ class Olympian : public Critter {
     /**
      * Inform the sim of the color of this critter.
      * @return the color of this critter.
+     * @see the Color enum for a list of available colors.
      */
     Color  color()   const override { return Color::RED; }
 
@@ -51,7 +52,7 @@ class Olympian : public Critter {
 
     /**
      * Make a new Olympian.
-     * @return a shared pointer to a new Olympian object.
+     * @return a shared pointer to a new Olympian.
      */
     std::shared_ptr<Critter> create() override {
       return std::make_shared<Olympian>();

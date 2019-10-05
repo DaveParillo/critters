@@ -50,14 +50,20 @@ class Critter {
      * but this can be overridden with the glyph() function. 
      * @param name the name of this Critter.
      */
-    Critter(const std::string name) : 
-      _name(name), _color(Color::WHITE), 
-      _awake(true), _mating(false), _has_mated(false), _baby_timer(20),
-      _wait_time(0) {
-
-        _glyph = std::toupper(name.at(0));
-        _food_remaining = MAX_FOOD / 2;
-      }
+    explicit Critter(const std::string& name) 
+      : _name(name)
+        , _color(Color::WHITE)
+        , _glyph('x')
+        , _updated(false)
+        , _awake(true)
+        , _mating(false)
+        , _has_mated(false)
+        , _baby_timer(20)
+        , _wait_time(0) 
+    {
+      _glyph = std::toupper(name.at(0));
+      _food_remaining = MAX_FOOD / 2;
+    }
 
     /**
      * Destroy Critter resources.
@@ -167,7 +173,7 @@ class Critter {
      *        which is the name of the critters class.
      * @return the Attack this Critter should make this turn
      */
-    virtual Attack fight(const std::string opponent) {
+    virtual Attack fight(const std::string& opponent) {
       if (opponent.length() == 0) return Attack::FORFEIT;
       return Attack::FORFEIT;
     }
