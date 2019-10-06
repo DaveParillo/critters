@@ -45,7 +45,7 @@ class game {
      * @param item the type of Critter to create
      * @param num_items the number of items to create
      */
-    void addItem(std::shared_ptr<critter> item, const int num_items);
+    void add_item(const std::shared_ptr<critter>& item, const int num_items);
 
   private:
     /** 
@@ -129,10 +129,9 @@ class game {
      * Movement is according to instructions received by the critter.
      * Illegal moves are not allowed, but no movement is always an option.
      * @param p the position where this critter currently resides (origin position)
-     * @param it a reference to the critter
      * @param move_dir The direction the critter wants to move
      */
-    void  move             (const point& p, const std::shared_ptr<critter>& it, const direction& move_dir);
+    void  move             (const point& p, const direction& move_dir);
 
     /**
      * Move a critter from a source point to a destination.
@@ -149,14 +148,14 @@ class game {
      * @param it a reference to the critter
      * @param dest the destintation position
      */
-    void  take_action      (const point& src, std::shared_ptr<critter> it, const point& dest);
+    void  take_action      (const point& src, const std::shared_ptr<critter>& it, const point& dest);
     /**
      * Controller what happens when a critter moves onto a tile containing food.
      * @param src the position where this critter currently resides (origin position)
      * @param it a reference to the critter
      * @param dest the destination postion
      */
-    void  process_food     (const point& src, std::shared_ptr<critter> it, const point& dest);
+    void  process_food     (const point& src, const std::shared_ptr<critter>& it, const point& dest);
     /**
      * Determine whether a critter is allowed to mate.
      * @param src_it a reference to the critter initiating the mating
@@ -172,21 +171,19 @@ class game {
      * @param dest the position where the mate resides
      * @param dest_it a reference to the mate
      */
-    void  process_mate     (const point& src,  std::shared_ptr<critter> src_it,
-                            const point& dest, std::shared_ptr<critter> dest_it);
+    void  process_mate     (const point& src,  const std::shared_ptr<critter>& src_it,
+                            const point& dest, const std::shared_ptr<critter>& dest_it);
     /**
      * Determine whether a critter is allowed to fight.
      *
      * The opponent can be disabled and not in fighting shape.
      *
-     * @param src the position where this critter currently resides
      * @param src_it a reference to the critter
-     * @param dest the position where the opponent resides
      * @param dest_it a reference to the opponent
      * @return true if src_it can fight
      */
-    bool  can_fight        (const point& src,  const std::shared_ptr<critter>& src_it,
-                            const point& dest, const std::shared_ptr<critter>& dest_it);
+    bool  can_fight        (const std::shared_ptr<critter>& src_it,
+                            const std::shared_ptr<critter>& dest_it);
 
     /**
      * Controller what happens when a critter moves onto a tile containing food.
@@ -195,8 +192,8 @@ class game {
      * @param dest the position where the opponent resides
      * @param dest_it a reference to the opponent
      */
-    void  process_fight    (const point& src,  std::shared_ptr<critter> src_it,
-                            const point& dest, std::shared_ptr<critter> dest_it);
+    void  process_fight    (const point& src,  const std::shared_ptr<critter>& src_it,
+                            const point& dest, const std::shared_ptr<critter>& dest_it);
 
     /**
      * Determine the outcome of two critters that are fighting.
@@ -205,14 +202,14 @@ class game {
      * @return the outcome, which could be a draw (no winner)
      */
     fight_results get_fight_results    
-      (std::shared_ptr<critter> attacker, std::shared_ptr<critter> defender);
+      (const std::shared_ptr<critter>& attacker, const std::shared_ptr<critter>& defender);
 
     /**
      * Update scores and outcomes after a fight.
      * @param winner reference to the winner of the fight
      * @param loser reference to the loser of the fight
      */
-    void update_kill_stats (std::shared_ptr<critter> winner, std::shared_ptr<critter> loser);
+    void update_kill_stats (const std::shared_ptr<critter>& winner, const std::shared_ptr<critter>& loser);
 
     /**
      * Get a random blank tile from the map of blanks.

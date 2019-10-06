@@ -3,11 +3,11 @@
 
 #include "critter.h"
 
-void critter::start_mating(unsigned int length) {
+void critter::start_mating(unsigned int rest) {
   assert(!mating_ && awake_);
   mating_ = true;
   has_mated_ = true;
-  wait_time_ = length;
+  wait_time_ = rest;
 }
 
 void critter::sleep(unsigned int num_turns) { 

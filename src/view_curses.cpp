@@ -1,10 +1,12 @@
 
 #include <algorithm>
-#include <string>
+#include <cstdint>
 #include <map>
+#include <string>
 #include <vector>
 
 #include <ncurses.h>
+
 #include "color.h"
 #include "view_curses.h"
 
@@ -54,14 +56,15 @@ char view_curses::get_key()  {
   return getch();
 }
 
-void view_curses::update_time(const unsigned long tick) {
+void view_curses::update_time(const int64_t tick) {
   mvwprintw(score_, score_ht_-1, 9, "      ");
   mvwprintw(score_, score_ht_-1, 9, std::to_string(tick).c_str());
   wrefresh(score_);
 }
 
-void view_curses::update_score(const std::map<std::string, shared_ptr<species>> players) {
+void view_curses::update_score(const std::map<std::string, shared_ptr<species>>& players) {
   std::vector<shared_ptr<species>> dudes;
+  dudes.reserve(players.size());
   for (auto& p: players) {
     dudes.push_back(p.second);
   }
@@ -72,7 +75,6 @@ void view_curses::update_score(const std::map<std::string, shared_ptr<species>> 
 
   auto i = 1;
   for (auto& d: dudes) {
-    //mvwprintw(score, i, 2,  CLEAR.c_str());  // not working, unexpected
     mvwprintw(score_, i, 2,  "                ");
     mvwprintw(score_, i, 15, "        ");
     mvwprintw(score_, i, 23, "        ");

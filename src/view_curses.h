@@ -2,6 +2,7 @@
 #define MESA_CRITTERS_VIEW_CURSES_H
 
 #include <cassert>
+#include <cstdint>
 #include <map>
 #include <string>
 #include <unordered_map>
@@ -62,11 +63,11 @@ class view_curses : public view {
     /**
      * @copydoc View::update_score()
      */
-    void update_score(const std::map<std::string, std::shared_ptr<species>> players) override;
+    void update_score(const std::map<std::string, std::shared_ptr<species>>& players) override;
     /**
      * @copydoc View::update_time()
      */
-    void update_time(const unsigned long tick) override;
+    void update_time(const int64_t tick) override;
     /**
      * @copydoc View::show_help()
      */
