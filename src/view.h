@@ -1,7 +1,6 @@
 #ifndef MESA_CRITTERS_VIEW_H
 #define MESA_CRITTERS_VIEW_H
 
-#include <cstdint>
 #include <map>
 #include <memory>
 #include <string>
@@ -47,13 +46,13 @@ class view {
      * @param players the Critters whose scores will be updated.
      *        It is expectd that all of the critters will always be updated.
      */
-    virtual void update_score(const std::map<std::string, std::shared_ptr<species>>& players) = 0;
+    virtual void update_score(const std::map<std::string, std::shared_ptr<species>> players) = 0;
 
     /**
      * Update the # of moves counter in the view.
      * @param tick the current time
      */
-    virtual void update_time(const int64_t tick) = 0;
+    virtual void update_time(const unsigned long tick) = 0;
     /**
      * Display runtime help information.
      */
