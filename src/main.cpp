@@ -115,27 +115,26 @@ int main(int argc, char** argv) {
     }
   }
 
-  game s;
+  game g;
 
-  s.set_view(std::unique_ptr<view>(new ViewCurses(x, y)));
-  s.set_debug(debug);
-  s.addItem(make_shared<stone>(),     max_stones);
-  s.addItem(make_shared<food>(),      max_food);
+  g.set_view(std::unique_ptr<view_curses>(new view_curses(x, y)));
+  g.set_debug(debug);
+  g.addItem(make_shared<stone>(),     max_stones);
+  g.addItem(make_shared<food>(),      max_food);
 
-  if (use_bear)     s.addItem(make_shared<bear>(),    max_critters);
-  if (use_lion)     s.addItem(make_shared<lion>(),    max_critters);
-  if (use_tiger)    s.addItem(make_shared<tiger>(),   max_critters);
-  if (use_raccoon)  s.addItem(make_shared<raccoon>(), max_critters);
-  if (use_wombat)   s.addItem(make_shared<wombat>(),  max_critters);
-  if (use_duck)     s.addItem(make_shared<duck>(),    max_critters);
+  if (use_bear)     g.addItem(make_shared<bear>(),    max_critters);
+  if (use_lion)     g.addItem(make_shared<lion>(),    max_critters);
+  if (use_tiger)    g.addItem(make_shared<tiger>(),   max_critters);
+  if (use_raccoon)  g.addItem(make_shared<raccoon>(), max_critters);
+  if (use_wombat)   g.addItem(make_shared<wombat>(),  max_critters);
+  if (use_duck)     g.addItem(make_shared<duck>(),    max_critters);
 
   for (const auto& p: add_players()) {
-    s.addItem(p,  max_critters);
+    g.addItem(p,  max_critters);
   }
 
-  s.start();
+  g.start();
   return 0;
-
 }
 
 

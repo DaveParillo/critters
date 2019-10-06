@@ -46,7 +46,7 @@ class olympian : public critter {
      * @return the color of this critter.
      * @see the Color enum for a list of available colors.
      */
-    color  color()   const override { return color::RED; }
+    enum color  color()   const override { return color::RED; }
 
 
 

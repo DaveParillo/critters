@@ -108,7 +108,7 @@ class critter {
     /**
      * Informs the simulator that this critter is a 'player'.
      * Only players appear on the scoreboard, can accumulate points and win.
-     * @return true if this critter is a player in the Simulator.
+     * @return true if this critter is a player in the simulator.
      * @return false if this critter is a non-player entity.
      */
     virtual bool is_player() const{ 
@@ -131,44 +131,44 @@ class critter {
 
 
     /**
-     * Create a new Critter.
+     * Create a new critter.
      * @return a shared pointer to a new critter object.
      */
     virtual std::shared_ptr<critter> create() = 0;
 
     /**
-     * Informs the Simulator of any movement a Critter wants to take during a turn.
+     * Informs the simulator of any movement a critter wants to take during a turn.
      * Direction::CENTER indicates no movement occurs.
      *
-     * The Simulator will call move exactly once each turn.
+     * The simulator will call move exactly once each turn.
      *
      * Override both move and fight, unless your critter is named 'Lunch'.
      *
      * @param neighbors A map of what is in the neighoring tiles around this critter.
-     * @return the Direction this Critter should move this turn
+     * @return the Direction this critter should move this turn
      */
-    virtual direction move(std::map<direction, std::shared_ptr<critter>> neighbors) {
-      assert (neighbors.size() > 0);
+    virtual direction move(const std::map<direction, std::shared_ptr<critter>>& neighbors) {
+      assert (!neighbors.empty());
       return direction::CENTER;
     }
     /**
-     * Informs the Simulator of the Critter color.
+     * Informs the simulator of the critter color.
      *
-     * The Sim may occasionally override this color to indicate 
-     * information about the Critter state, but will preserve this color as
-     * the 'primary color' associated with this Critter.
+     * The sim may occasionally override this color to indicate 
+     * information about the critter state, but will preserve this color as
+     * the 'primary color' associated with this critter.
      *
-     * @return the Color of this Critter
+     * @return the color of this critter
      */
-    virtual color color() const {
+    virtual enum color color() const {
       return color_;
     }
 
     /**
-     * Informs the Simulator of how to respond during a fight.
-     * attack::FORFEIT always results in the death of this Critter.
+     * Informs the simulator of how to respond during a fight.
+     * attack::FORFEIT always results in the death of this critter.
      *
-     * The Simulator will call fight exactly once each turn.
+     * The simulator will call fight exactly once each turn.
      *
      * @param opponent the name of the opponent.
      *        For default critters, the opponent names will *always* match the species name,
@@ -216,7 +216,7 @@ class critter {
     virtual void draw()   const {}
     /**
      * Used by the simulator to inform this critter it has been put to sleep.
-     * A sleeping Critter can take no actions.
+     * A sleeping critter can take no actions.
      * It can't move until it wakes up and immediately loses all fights.
      */
     virtual void sleep()  const {}
@@ -271,27 +271,27 @@ class critter {
     }
 
     /**
-     * Called by the Simulator sta start the process of two Critters of the same
+     * Called by the simulator sta start the process of two critters of the same
      * species to mate.
      * @param rest the number of turns the critter will rest after mating.
      */
     void start_mating(unsigned int rest);
 
     /**
-     * Called by the Simulator when the return value from Critter::eat == true.
+     * Called by the simulator when the return value from critter::eat == true.
      * If the amount of food remaining for a critter exceeds MAX_FOOD, the critter
      * is _stuffed_ and needs to sleep it off until the value drops below MAX_FOOD.
      */
     void eat_food();
 
     /**
-     * Force this Critter to sleep the indicated number of turns.
+     * Force this critter to sleep the indicated number of turns.
      * @param num_turns the number of turns the critter will sleep.
      */
     void sleep(unsigned int num_turns);
 
     /**
-     * Update Critter state variables that need modifying every time step:
+     * Update critter state variables that need modifying every time step:
      *  - wait time
      *  - checking to see if the awake or mating states can change
      */
@@ -301,9 +301,9 @@ class critter {
 };
 
 /**
- * Insert formatted Critter state information into an output stream.
+ * Insert formatted critter state information into an output stream.
  * @param os reference to an output stream
- * @param it reference to a Critter to stream
+ * @param it reference to a critter to stream
  * @return the modified output stream
  */
 std::ostream& operator<<(std::ostream &os, const critter& it);

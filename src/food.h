@@ -15,7 +15,6 @@ class food : public critter {
   public:
     food() : critter("Food") { }
 
-    
     /**
      * Rather than the default 'F', food is represented as a period: '.'.
      * @return the symbol for Food.
@@ -24,7 +23,6 @@ class food : public critter {
       return char(46);
     }
 
-    
     /**
      * Make more Food.
      * @return a shared pointer to a new Food object.

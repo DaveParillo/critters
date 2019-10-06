@@ -1,8 +1,11 @@
 #ifndef MESA_CRITTERS_VIEW_CURSES_H
 #define MESA_CRITTERS_VIEW_CURSES_H
-#include <iostream>
+
+#include <cassert>
+#include <map>
 #include <string>
 #include <unordered_map>
+
 #include <ncurses.h>
 
 #include "color.h"
@@ -10,13 +13,6 @@
 #include "point.h"
 #include "species.h"
 #include "view.h"
-
-using std::map;
-using std::unordered_map;
-using std::string;
-using std::shared_ptr;
-using std::unique_ptr;
-
 
 /**
  * Defines an ncurses representation of the Critters world.
@@ -37,10 +33,10 @@ class view_curses : public view {
      * @param width the desired width of the world
      */
     view_curses(const int height, const int width) 
-      : world_ht(height)
-        , score_ht(10)
-        , world_wd(width)
-        , score_wd(0)
+      : world_ht_(height)
+        , score_ht_(10)
+        , world_wd_(width)
+        , score_wd_(0)
     {
       setup();
     }
@@ -57,16 +53,16 @@ class view_curses : public view {
      * @param p the location on the world screen
      * @param it an entity to draw.
      */
-    void draw(const point& p, const shared_ptr<critter> it) const override;
+    void draw(const point& p, const std::shared_ptr<critter> it) const override;
 
-    void redraw(const unordered_map<point,  shared_ptr<critter>> tiles) override {
+    void redraw(const std::unordered_map<point,  std::shared_ptr<critter>> tiles) override {
       assert (tiles.size() > 0);
     }
 
     /**
      * @copydoc View::update_score()
      */
-    void update_score(const map<string, shared_ptr<species>> players) override;
+    void update_score(const std::map<std::string, std::shared_ptr<species>> players) override;
     /**
      * @copydoc View::update_time()
      */
@@ -89,11 +85,11 @@ class view_curses : public view {
     /**
      * @copydoc View::width()
      */
-    int  height()  override { return world_ht; }
+    int  height()  override { return world_ht_; }
     /**
      * @copydoc View::width()
      */
-    int  width()  override { return world_wd; }
+    int  width()  override { return world_wd_; }
 
     /**
      * Cleanup allocated ncurses windows and resources.
@@ -101,16 +97,16 @@ class view_curses : public view {
     void teardown() override;
 
   private:
-    WINDOW* world = nullptr;                   /**< nucurses window for the critter playing surface */
-    WINDOW* score = nullptr;                   /**< nucurses window for the scores */
-    WINDOW* help = nullptr;                    /**< nucurses window for the help dialog */
-    int maxheight = 24;                        /**< maximum height of the console containing the game */
-    int maxwidth = 72;                         /**< maximum width of the console containing the game */
-    int world_ht = 0;                          /**< height of the world screen */
-    int score_ht = 10;                         /**< height of the score screen */
-    int world_wd = 0;                          /**< width of the world screen */
-    int score_wd = 0;                          /**< width of the score screen */
-    const std::string CLEAR = {65, ' '};       /**< a bunch of blank spaces used to clear a score line */
+    WINDOW* world_ = nullptr;                   /**< nucurses window for the critter playing surface */
+    WINDOW* score_ = nullptr;                   /**< nucurses window for the scores */
+    WINDOW* help_ = nullptr;                    /**< nucurses window for the help dialog */
+    int maxheight_ = 24;                        /**< maximum height of the console containing the game */
+    int maxwidth_ = 72;                         /**< maximum width of the console containing the game */
+    int world_ht_ = 0;                          /**< height of the world screen */
+    int score_ht_ = 10;                         /**< height of the score screen */
+    int world_wd_ = 0;                          /**< width of the world screen */
+    int score_wd_ = 0;                          /**< width of the score screen */
+    const std::string clear_all_ = {65, ' '};       /**< a bunch of blank spaces used to clear a score line */
 
     /**
      * Initialize the view.
@@ -138,7 +134,7 @@ class view_curses : public view {
      * @return the ncurses COLOR_PAIR index associated with the color used.
      *         All the color pairs are defined in setup_colors()
      */
-    int  set_color(const shared_ptr<critter> it) const;
+    int  set_color(const std::shared_ptr<critter>& it) const;
     /**
      * Apply any mods to a color based on the current state of a critter
      *
@@ -146,7 +142,7 @@ class view_curses : public view {
      * @param it the critter
      * @return the ncurses COLOR_PAIR index associated with the color used.
      */
-    int  adjust_color(const int color, const shared_ptr<critter> it) const;
+    int  adjust_color(const int color, const std::shared_ptr<critter>& it) const;
 
     /**
      * Reset the ncurses color environment back to its defaults.
@@ -157,8 +153,4 @@ class view_curses : public view {
 
 };
 
-
-
 #endif
-
-

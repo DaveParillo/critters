@@ -1,58 +1,52 @@
 #ifndef MESA_CRITTERS_VIEW_H
 #define MESA_CRITTERS_VIEW_H
 
+#include <map>
 #include <memory>
+#include <string>
 #include <unordered_map>
 
 #include "critter.h"
 #include "point.h"
 #include "species.h"
 
-
-using std::map;
-using std::unordered_map;
-using std::string;
-using std::shared_ptr;
-using std::unique_ptr;
-
-
 /**
  * Interface for all renderers of a Critters world.
  */
 class view {
   private:
-    int _height;   /**< height of the view occupied by the Critter world */
-    int _width;    /**< width  of the view occupied by the Critter world */
+    int height_;   /**< height of the view occupied by the Critter world */
+    int width_;    /**< width  of the view occupied by the Critter world */
   public:
     /**
      * Init the viewable game world. 
      */
-    view(){};
+    view() = default;
     /**
      * Init the game with a specified height and width
      * @param height of the space allocated for the Critter world
      * @param width of the space allocated for the Critter world
      */
-    view(int height, int width) : _height(height), _width(width) {};
+    view(int height, int width) : height_(height), width_(width) {};
     /**
      * Destroy View resources.
      */
-    virtual ~view() {};
+    virtual ~view() = default;
     /**
      * Render a Critter at its defined location.
      * @param p the Point in the Critter world to be drawn.
      * @param it the Critter to draw
      */
-    virtual void draw(const point& p, const shared_ptr<critter> it) const = 0;
+    virtual void draw(const point& p, const std::shared_ptr<critter> it) const = 0;
 
-    virtual void redraw(const unordered_map<point,  shared_ptr<critter>> tiles) = 0;
+    virtual void redraw(const std::unordered_map<point,  std::shared_ptr<critter>> tiles) = 0;
 
     /**
      * Update the the scores for all the Critters that are competing.
      * @param players the Critters whose scores will be updated.
      *        It is expectd that all of the critters will always be updated.
      */
-    virtual void update_score(const map<string, shared_ptr<species>> players) = 0;
+    virtual void update_score(const std::map<std::string, std::shared_ptr<species>> players) = 0;
 
     /**
      * Update the # of moves counter in the view.
@@ -78,12 +72,12 @@ class view {
      * Return the height of the view occupied by the Critter world.
      * @return the height of the view occupied by the Critter world.
      */
-    virtual int height() {return _height;}
+    virtual int height() {return height_;}
     /**
      * Return the width of the view occupied by the Critter world.
      * @return the width of the view occupied by the Critter world.
      */
-    virtual int width()  {return _width;}
+    virtual int width()  {return width_;}
 
     /**
      * Cleanup allocated view windows and resources.
@@ -91,8 +85,5 @@ class view {
     virtual void teardown() = 0;
 };
 
-
-
 #endif
-
 

@@ -2,6 +2,7 @@
 #define MESA_CRITTERS_DIRECTION_H
 
 #include <array>
+#include <iosfwd>
 #include <map>
 
 /**
