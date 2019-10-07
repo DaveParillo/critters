@@ -8,10 +8,12 @@ project(critters VERSION 1.0.0 LANGUAGES CXX)
 find_package(Curses REQUIRED)
 
 set (SOURCES 
-  color.cpp color.h
-  critter.cpp critter.h
-  direction.cpp direction.h
-  food.h olympian.h
+  ${CMAKE_SOURCE_DIR}/include/color.h
+  ${CMAKE_SOURCE_DIR}/include/direction.h
+  ${CMAKE_SOURCE_DIR}/include/critter.h
+  critter.cpp
+  direction.cpp
+  food.h
   game.cpp game.h
   point.cpp point.h
   species.cpp species.h
@@ -42,7 +44,8 @@ else()
 endif()
 
 add_executable(${PROJECT_NAME} 
-  add_players.cpp add_players.h
+  ${CMAKE_SOURCE_DIR}/include/add_players.h
+  add_players.cpp
 )
 
 target_link_libraries(${PROJECT_NAME} ${CMAKE_PROJECT_NAME} )

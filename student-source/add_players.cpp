@@ -1,10 +1,12 @@
+#include <memory>
+#include <vector>
+
+#include <add_players.h>
+#include <critter.h>
 
 // add your competitor(s) include files here
 #include "olympian.h"
 
-#include <critter.h>
-#include <memory>
-#include <vector>
 
 using players = std::vector<std::shared_ptr<critter>>;
 

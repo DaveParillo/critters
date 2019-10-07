@@ -4,7 +4,8 @@
 #include <memory>
 #include <string>
 
-#include "add_players.h"
+#include <add_players.h>
+
 // default players
 #ifdef WITH_SOLUTIONS
 #  include "solutions/bear.h"
@@ -14,6 +15,7 @@
 #  include "solutions/wombat.h"
 #  include "solutions/duck.h"
 #endif
+
 // non player entities
 #include "food.h"
 #include "stone.h"
