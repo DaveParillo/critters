@@ -70,23 +70,25 @@ void view_curses::update_score(const std::map<std::string, shared_ptr<species>> 
         return b->score() < a->score();   
       });
 
+  constexpr auto blank = "        ";
+  constexpr auto wide_blank = "                ";
   auto i = 1;
   for (auto& d: dudes) {
     //mvwprintw(score, i, 2,  CLEAR.c_str());  // not working, unexpected
-    mvwprintw(score_, i, 2,  "                ");
-    mvwprintw(score_, i, 15, "        ");
-    mvwprintw(score_, i, 23, "        ");
-    mvwprintw(score_, i, 30, "        ");
-    mvwprintw(score_, i, 38, "        ");
-    mvwprintw(score_, i, 49, "        ");
-    mvwprintw(score_, i, 59, "        ");
+    mvwprintw(score_, i, 2, wide_blank);
+    mvwprintw(score_, i, 15, blank);
+    mvwprintw(score_, i, 23, blank);
+    mvwprintw(score_, i, 30, blank);
+    mvwprintw(score_, i, 38, blank);
+    mvwprintw(score_, i, 49, blank);
+    mvwprintw(score_, i, 59, blank);
     mvwprintw(score_, i, 2,  d->name().c_str());
-    mvwprintw(score_, i, 16, std::to_string(d->alive()).c_str());
-    mvwprintw(score_, i, 24, std::to_string(d->dead()).c_str());
-    mvwprintw(score_, i, 31, std::to_string(d->kills()).c_str());
-    mvwprintw(score_, i, 39, std::to_string(d->feedings()).c_str());
-    mvwprintw(score_, i, 50, std::to_string(d->starved()).c_str());
-    mvwprintw(score_, i, 60, std::to_string(d->score()).c_str());
+    mvwprintw(score_, i, 16, "%d", d->alive());
+    mvwprintw(score_, i, 24, "%d", d->dead());
+    mvwprintw(score_, i, 31, "%d", d->kills());
+    mvwprintw(score_, i, 39, "%d", d->feedings());
+    mvwprintw(score_, i, 50, "%d", d->starved());
+    mvwprintw(score_, i, 60, "%d", d->score());
     i++;
   }
   wrefresh(score_);
