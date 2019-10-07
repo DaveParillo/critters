@@ -223,7 +223,6 @@ void view_curses::setup_world() {
 
 void view_curses::teardown() {
   nodelay(stdscr, false);
-  getch();
   delwin(world_);
   delwin(score_);
   endwin();
