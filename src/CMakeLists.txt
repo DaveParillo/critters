@@ -7,7 +7,7 @@ project(critters VERSION 1.0.0 LANGUAGES CXX)
 
 find_package(Curses REQUIRED)
 
-add_library(${CMAKE_PROJECT_NAME} 
+set (SOURCES 
   color.cpp color.h
   critter.cpp critter.h
   direction.cpp direction.h
@@ -19,13 +19,27 @@ add_library(${CMAKE_PROJECT_NAME}
   view.h
   view_curses.cpp view_curses.h
   main.cpp
-  solutions/bear.cpp solutions/bear.h
-  solutions/duck.cpp solutions/duck.h
-  solutions/lion.cpp solutions/lion.h
-  solutions/raccoon.cpp solutions/raccoon.h
-  solutions/tiger.cpp solutions/tiger.h
-  solutions/wombat.cpp solutions/wombat.h
 )
+
+if(WITH_SOLUTIONS)
+  add_definitions(-DWITH_SOLUTIONS)
+
+  add_library(${CMAKE_PROJECT_NAME} 
+    ${SOURCES}
+    solutions/bear.cpp solutions/bear.h
+    solutions/duck.cpp solutions/duck.h
+    solutions/lion.cpp solutions/lion.h
+    solutions/raccoon.cpp solutions/raccoon.h
+    solutions/tiger.cpp solutions/tiger.h
+    solutions/wombat.cpp solutions/wombat.h
+  )
+
+else()
+  add_library(${CMAKE_PROJECT_NAME} 
+    ${SOURCES}
+  )
+
+endif()
 
 add_executable(${PROJECT_NAME} 
   add_players.cpp add_players.h

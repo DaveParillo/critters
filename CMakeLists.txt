@@ -15,7 +15,7 @@ else()
   add_compile_options(-Wall -Wextra -pedantic)
 endif(MSVC)
 
-
+option(WITH_SOLUTIONS "Compile in solutions" ON)
 
 add_subdirectory(src)
 add_subdirectory(student-source)
