@@ -20,10 +20,11 @@ class game {
   
   public:
     /**
-     * Create a simulator.
+     * Create a rock-paper-scissors world simulator.
      * Before being used, at a minimum the set_view method must be called to initialize a UI.
      */
     game() = default;
+    ~game() = default;
     /**
      * Start running the simulation.
      */

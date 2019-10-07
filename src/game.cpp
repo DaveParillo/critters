@@ -64,6 +64,7 @@ void game::start() {
     }
     ++count;
   }
+  view_->teardown();
 }
 
 bool game::lone_species() {
