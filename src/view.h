@@ -37,7 +37,7 @@ class view {
      * @param p the Point in the Critter world to be drawn.
      * @param it the Critter to draw
      */
-    virtual void draw(const point& p, const std::shared_ptr<critter> it) const = 0;
+    virtual void draw(const point& p, const critter& it) const = 0;
 
     virtual void redraw(const std::unordered_map<point,  std::shared_ptr<critter>> tiles) = 0;
 

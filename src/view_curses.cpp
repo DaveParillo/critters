@@ -123,17 +123,17 @@ void view_curses::setup_colors() const {
   init_pair(28,COLOR_CYAN, COLOR_RED);
 }
 
-int view_curses::adjust_color(const int color, const shared_ptr<critter>& it) const {
+int view_curses::adjust_color(const int color, const critter& it) const {
   auto c = color;
-  if (it->is_asleep()) c += 10;
-  if (it->is_mating()) c += 20;
+  if (it.is_asleep()) c += 10;
+  if (it.is_mating()) c += 20;
 
   return c;
 }
 
-int view_curses::set_color(const shared_ptr<critter>& it) const {
+int view_curses::set_color(const critter& it) const {
   int color;
-  switch (it->color()) {
+  switch (it.color()) {
     case color::WHITE:
       color = 2;
       break;
@@ -227,10 +227,10 @@ void view_curses::teardown() {
   endwin();
 }
 
-void view_curses::draw(const point& p, const std::shared_ptr<critter>  it) const {
+void view_curses::draw(const point& p, const critter&  it) const {
   wmove(world_, p.y, p.x);
   auto c = set_color(it);
-  waddch(world_,it->glyph());
+  waddch(world_,it.glyph());
   unset_color(c);
   wrefresh(world_);
 

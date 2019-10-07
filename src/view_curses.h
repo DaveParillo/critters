@@ -53,7 +53,7 @@ class view_curses : public view {
      * @param p the location on the world screen
      * @param it an entity to draw.
      */
-    void draw(const point& p, const std::shared_ptr<critter> it) const override;
+    void draw(const point& p, const critter& it) const override;
 
     void redraw(const std::unordered_map<point,  std::shared_ptr<critter>> tiles) override {
       assert (tiles.size() > 0);
@@ -134,7 +134,7 @@ class view_curses : public view {
      * @return the ncurses COLOR_PAIR index associated with the color used.
      *         All the color pairs are defined in setup_colors()
      */
-    int  set_color(const std::shared_ptr<critter>& it) const;
+    int  set_color(const critter& it) const;
     /**
      * Apply any mods to a color based on the current state of a critter
      *
@@ -142,7 +142,7 @@ class view_curses : public view {
      * @param it the critter
      * @return the ncurses COLOR_PAIR index associated with the color used.
      */
-    int  adjust_color(const int color, const std::shared_ptr<critter>& it) const;
+    int  adjust_color(const int color, const critter& it) const;
 
     /**
      * Reset the ncurses color environment back to its defaults.

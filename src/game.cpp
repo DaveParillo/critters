@@ -48,9 +48,9 @@ void game::start() {
       if (help) view_->hide_help();  // hide only if already being shown
       help = !help;
     }
-    if (help)                             view_->show_help();
-    if (command_ == 'p')                   play = !play;
-    if (command_ == '-')                   delay = std::min(25000, delay + 100);
+    if (help)                               view_->show_help();
+    if (command_ == 'p')                    play = !play;
+    if (command_ == '-')                    delay = std::min(25000, delay + 100);
     if (command_ == '=' || command_ == '+') delay = std::max(  10, delay - 100);
     sleep_for(std::chrono::microseconds(100));
 
@@ -107,16 +107,15 @@ void game::update (const point& p, const shared_ptr<critter>& it) {
     players_[it->name()]->add_starved();
     if (debug_ != 0) std::cerr << it->name() << " @ " << p << " starved to death.\n";
     tiles_[p] = blank_tile;
-    view_->draw(p, tiles_[p]);
+    view_->draw(p, *tiles_[p]);
   } else if (it->is_asleep()) {
     if (debug_ != 0) std::cerr << it->name() << " @ " << p << " is asleep.\n";
     // can't initiate any actions
-    view_->draw(p, tiles_[p]);
+    view_->draw(p, *tiles_[p]);
   }  else if (it->is_mating()) {
     if (debug_ != 0) std::cerr << it->name() << " @ " << p << " is mating.\n";
-    view_->draw(p, tiles_[p]);
+    view_->draw(p, *tiles_[p]);
   } else {
-
 
     auto neighbors = get_neighbors(p);
     auto move_dir = it->move(neighbors);
@@ -128,7 +127,7 @@ void game::update (const point& p, const shared_ptr<critter>& it) {
         auto dest = p.translate(p, move_dir, view_->width(),view_->height());
         take_action(p, it, dest);
       } else {
-        view_->draw(p, tiles_[p]);
+        view_->draw(p, *tiles_[p]);
       }
     }
   }
@@ -155,8 +154,8 @@ void game::move (const point& p, const shared_ptr<critter>& it, const direction&
     if (debug_ != 0) std::cerr << it->name() << " moving to " << new_posit << "\n";
     std::swap(tiles_[p], tiles_[new_posit]);
   }
-  view_->draw(new_posit, tiles_[new_posit]);
-  view_->draw(p, tiles_[p]);
+  view_->draw(new_posit, *tiles_[new_posit]);
+  view_->draw(p, *tiles_[p]);
 }
 
 
@@ -165,8 +164,8 @@ void game::move (const point& src, const point& dest) {
   assert (tiles_[dest] == blank_tile || tiles_[dest]->name() == "Food");
   if (debug_ != 0) std::cerr << "moving from " << src << " to " << dest << "\n";
   std::swap(tiles_[src], tiles_[dest]);
-  view_->draw(src, tiles_[src]);
-  view_->draw(dest, tiles_[dest]);
+  view_->draw(src, *tiles_[src]);
+  view_->draw(dest, *tiles_[dest]);
 }
 
 
@@ -229,11 +228,11 @@ void game::process_food(const point& src,  shared_ptr<critter> src_it, const poi
     tiles_[dest] = blank_tile;
     move(src,dest);
     // make more food somewhere else
-    auto food_spot = std::next(std::begin(tiles_), std::uniform_int_distribution<int> {0, int(tiles_.size())} (gen));
+    auto food_spot = std::next(std::begin(tiles_), std::uniform_int_distribution<int> {0, int(tiles_.size()-1)} (gen));
     auto p = std::get<0>(*food_spot);
     if (tiles_[p] == blank_tile) {
       tiles_[p] = std::make_shared<food>();
-      view_->draw(p, tiles_[p]);
+      view_->draw(p, *tiles_[p]);
     }
   }
 
@@ -267,9 +266,9 @@ void game::process_mate(const point& src,  shared_ptr<critter> src_it, const poi
     dest_it->start_mating(30);
 
     tiles_[b_dest] = baby;
-    view_->draw(b_dest, baby);
-    view_->draw(src, tiles_[src]);
-    view_->draw(dest, tiles_[dest]);
+    view_->draw(b_dest, *baby);
+    view_->draw(src, *tiles_[src]);
+    view_->draw(dest, *tiles_[dest]);
     if(debug_ != 0)    std::cerr << src_it->name() << " made baby. The baby is at: " << b_dest << "\n";
   }
 }
@@ -308,14 +307,14 @@ void game::process_fight(const point& src,  shared_ptr<critter> src_it,
   if (results == game::fight_results::ATTACKER) {
     if (debug_ != 0) std::cerr << src_it->name() << " won \n";
     tiles_[dest] = blank_tile;
-    view_->draw(dest, tiles_[dest]);
+    view_->draw(dest, *tiles_[dest]);
     if (debug_ != 0) std::cerr << "move after victory \n";
     move(src,dest);
     update_kill_stats(src_it, dest_it);
   } else if (results == game::fight_results::DEFENDER) {
     if (debug_ != 0) std::cerr << dest_it->name() << " won \n";
     tiles_[src] = blank_tile;
-    view_->draw(src, tiles_[src]);
+    view_->draw(src, *tiles_[src]);
     update_kill_stats(dest_it, src_it);
   } else {
     if (debug_ != 0) std::cerr << "fight was a draw \n";
@@ -385,7 +384,7 @@ void game::add_item(shared_ptr<critter> item, const int num_items) {
     assert(tiles_[p] == blank_tile);
     tiles_[p] = c;
     blanks_.erase(p);
-    view_->draw(p, c);
+    view_->draw(p, *c);
   }
 
   //add item to species set
