@@ -14,7 +14,7 @@
 #include "species.h"
 
 /**
- * The main Critter simulation controller.
+ * The main critter simulation controller.
  */
 class game {
   
@@ -42,7 +42,7 @@ class game {
 
     /**
      * Seeds the world with some number of Entities.
-     * @param item the type of Critter to create
+     * @param item the type of critter to create
      * @param num_items the number of items to create
      */
     void add_item(std::shared_ptr<critter> item, const int num_items);
@@ -88,12 +88,12 @@ class game {
     std::map<std::string, std::shared_ptr<species>> players_;
 
     /**
-     * Represents the results between two Critters fighting.
+     * Represents the results between two critters fighting.
      */
     enum class fight_results {
       ATTACKER,     /*!< The attacker won */
       DEFENDER,     /*!< The defender won */
-      DRAW          /*!< The fight was a tie - neither Critter won */
+      DRAW          /*!< The fight was a tie - neither critter won */
     };
 
 
@@ -110,7 +110,7 @@ class game {
     bool  lone_species();
 
     /**
-     * Update is the starting point for all movement and action initiated bya  Critter
+     * Update is the starting point for all movement and action initiated by a critter
      * each time step.
      * @param p the position where this critter currently resides
      * @param it a reference to the critter
@@ -229,7 +229,7 @@ class game {
 
 
     /**
-     * A special Critter defined by the simulator to occupy a blank tile.
+     * A special critter defined by the simulator to occupy a blank tile.
      */
     class EMPTY : public critter {
       public:
@@ -242,7 +242,7 @@ class game {
     };
 
     /**
-     * An unoccupied tile in the Critter world.
+     * An unoccupied tile in the critter world.
      * Moving onto a blank tile will not trigger any other action for the moving critter
      * during the current turn.
      */
