@@ -45,7 +45,7 @@ class game {
      * @param item the type of Critter to create
      * @param num_items the number of items to create
      */
-    void addItem(std::shared_ptr<critter> item, const int num_items);
+    void add_item(std::shared_ptr<critter> item, const int num_items);
 
   private:
     /** 

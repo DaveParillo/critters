@@ -362,7 +362,7 @@ void game::update_kill_stats(shared_ptr<critter> winner, shared_ptr<critter> los
   loser->lost();            // report status
 }
 
-void game::addItem(shared_ptr<critter> item, const int num_items) {
+void game::add_item(shared_ptr<critter> item, const int num_items) {
   assert(item != nullptr);
   typedef std::unordered_map<point,shared_ptr<critter>>::value_type tile_type;
 
@@ -395,7 +395,7 @@ void game::addItem(shared_ptr<critter> item, const int num_items) {
 }
 
 point game::get_random_blank_tile() {
-  auto random_it = std::next(std::begin(blanks_), std::uniform_int_distribution<int> {0, int(blanks_.size())} (gen));
+  auto random_it = std::next(std::begin(blanks_), std::uniform_int_distribution<int> {0, int(blanks_.size()-1)} (gen));
   return std::get<0>(*random_it);
 }
 
