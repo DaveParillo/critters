@@ -54,13 +54,13 @@ EXTRACT_ALL            = NO
 EXTRACT_PRIVATE        = YES
 EXTRACT_PACKAGE        = YES
 EXTRACT_STATIC         = YES
-CASE_SENSE_NAMES       = NO
+CASE_SENSE_NAMES       = YES
 GENERATE_TODOLIST      = YES
 GENERATE_TESTLIST      = YES
 GENERATE_BUGLIST       = YES
 WARN_NO_PARAMDOC       = YES
 
-INPUT                  = src README.md
+INPUT                  = src include README.md
 
 RECURSIVE              = YES
 

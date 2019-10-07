@@ -60,34 +60,34 @@ class view_curses : public view {
     }
 
     /**
-     * @copydoc View::update_score()
+     * @copydoc view::update_score()
      */
     void update_score(const std::map<std::string, std::shared_ptr<species>> players) override;
     /**
-     * @copydoc View::update_time()
+     * @copydoc view::update_time()
      */
     void update_time(const unsigned long tick) override;
     /**
-     * @copydoc View::show_help()
+     * @copydoc view::show_help()
      */
     void show_help() override;
     /**
-     * @copydoc View::hide_help()
+     * @copydoc view::hide_help()
      */
     void hide_help() override;
 
     /**
-     * @copydoc View::get_key()
+     * @copydoc view::get_key()
      */
     char get_key() override;
 
 
     /**
-     * @copydoc View::width()
+     * @copydoc view::width()
      */
     int  height()  override { return world_ht_; }
     /**
-     * @copydoc View::width()
+     * @copydoc view::width()
      */
     int  width()  override { return world_wd_; }
 
