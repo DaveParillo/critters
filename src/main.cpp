@@ -1,3 +1,8 @@
+#include <unistd.h>
+
+#include <iostream>
+#include <memory>
+#include <string>
 
 #include "add_players.h"
 // default players
@@ -14,10 +19,6 @@
 #include "game.h"
 #include "view.h"
 #include "view_curses.h"
-#include <iostream>
-#include <memory>
-#include <string>
-#include <unistd.h>
 
 using std::make_shared;
 using std::string;
@@ -49,6 +50,7 @@ static void show_usage(const string name)
     << std::endl;
   exit(0);
 }
+
 
 int main(int argc, char** argv) {
   int max_food = 50;
