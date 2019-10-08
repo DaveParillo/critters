@@ -113,32 +113,13 @@ class game {
     /**
      * Update is the starting point for all movement and action initiated by a critter
      * each time step.
-     * @param p the position where this critter currently resides
-     * @param it a reference to the critter
+     * @param t a reference to a game tile
      */
-    void  update           (const point& p, const std::shared_ptr<critter>& it);
-    /**
-     * Determine whether a critter is allowed to move.
-     * @param p the position where this critter currently resides (origin position)
-     * @param it a reference to the critter
-     * @param move_dir The direction the critter wants to move
-     * @return true if it can move from its origin to its desired destination
-     */
-    bool  can_move         (const point& p, const std::shared_ptr<critter>& it, const direction& move_dir);
-    /**
-     * Move a critter.
-     * Movement is according to instructions received by the critter.
-     * Illegal moves are not allowed, but no movement is always an option.
-     * @param p the position where this critter currently resides (origin position)
-     * @param it a reference to the critter
-     * @param move_dir The direction the critter wants to move
-     */
-    void  move             (const point& p, const std::shared_ptr<critter>& it, const direction& move_dir);
-
+    void  update           (const std::pair<point,  std::shared_ptr<critter>>& t);
     /**
      * Move a critter from a source point to a destination.
      *
-     * The desination must be either blank or contain food.
+     * The destination must not be a stone.
      *
      * @param src the position where this critter currently resides (origin position)
      * @param dest the destintation position
@@ -147,17 +128,15 @@ class game {
     /**
      * Controller for all non-movement actions taken by a critter (fight, mate, etc).
      * @param src the position where this critter currently resides (origin position)
-     * @param it a reference to the critter
      * @param dest the destintation position
      */
-    void  take_action      (const point& src, std::shared_ptr<critter> it, const point& dest);
+    void  take_action      (const point& src, const point& dest);
     /**
      * Controller what happens when a critter moves onto a tile containing food.
      * @param src the position where this critter currently resides (origin position)
-     * @param it a reference to the critter
      * @param dest the destination postion
      */
-    void  process_food     (const point& src, std::shared_ptr<critter> it, const point& dest);
+    void  process_food     (const point& src, const point& dest);
     /**
      * Determine whether a critter is allowed to mate.
      * @param src_it a reference to the critter initiating the mating
@@ -175,19 +154,6 @@ class game {
      */
     void  process_mate     (const point& src,  std::shared_ptr<critter> src_it,
                             const point& dest, std::shared_ptr<critter> dest_it);
-    /**
-     * Determine whether a critter is allowed to fight.
-     *
-     * The opponent can be disabled and not in fighting shape.
-     *
-     * @param src the position where this critter currently resides
-     * @param src_it a reference to the critter
-     * @param dest the position where the opponent resides
-     * @param dest_it a reference to the opponent
-     * @return true if src_it can fight
-     */
-    bool  can_fight        (const point& src,  const std::shared_ptr<critter>& src_it,
-                            const point& dest, const std::shared_ptr<critter>& dest_it);
 
     /**
      * Controller what happens when a critter moves onto a tile containing food.
@@ -214,12 +180,6 @@ class game {
      * @param loser reference to the loser of the fight
      */
     void update_kill_stats (std::shared_ptr<critter> winner, std::shared_ptr<critter> loser);
-
-    /**
-     * Get a random blank tile from the map of blanks.
-     * @return a Point that is equal to EMPTY
-     */
-    point get_random_blank_tile();
 
     /**
      * Get all of the neighoring tiles that surround the indicated location.
