@@ -63,19 +63,19 @@ void game::start() {
       update_tiles();
       view_->update_time(tick_);
       view_->update_score(players_);
-      if (lone_species())                 play = false;
+      // one specied left standing
+      auto alone = [this]() {
+        auto count = 0;
+        for (const auto& p : players_) {
+          if (p.second->alive() > 0) ++count;
+        }
+        return count <= 1;
+      };
+      // if (alone())                 play = false;
     }
     ++count;
   }
   view_->teardown();
-}
-
-bool game::lone_species() {
-  auto count = 0;
-  for (const auto& p : players_) {
-    if (p.second->alive() > 0) ++count;
-  }
-  return count <= 1;
 }
 
 void game::update_tiles() {
@@ -103,7 +103,7 @@ void game::init_tiles() {
 }
 
 void game::update (const tile& t) {
-  const auto& origin = t.first;
+  const auto& pos = t.first;
   const auto& it = t.second;
   if (it->updated()) return;
 
@@ -112,35 +112,36 @@ void game::update (const tile& t) {
 
   if (it->food_remaining() == 0) {
     players_[it->name()]->add_starved();
-    tiles_[origin] = blank_tile;
-    view_->draw(origin, *it);
+    tiles_[pos] = blank_tile;
+    view_->draw(pos, *tiles_[pos]);
   } else if (it->is_asleep() || it->is_mating()) {
-    view_->draw(origin, *it);
+    view_->draw(pos, *it);
   } else {
 
-    auto neighbors = get_neighbors(origin);
+    auto neighbors = get_neighbors(pos);
     auto move_dir = it->move(neighbors);
     if (move_dir <= direction::CENTER ||
         move_dir > direction::NORTH_WEST) {
-      view_->draw(origin, *it);
+      view_->draw(pos, *it);
       return;
     }
-    auto can_move = [&origin, &it, &move_dir, this]() {
+
+    auto can_move = [&pos, &it, &move_dir, this]() {
       if (it->wait_remaining() != 0u)    return false;
-      auto tmp =  origin.translate(origin, move_dir, view_->width(),view_->height());
+      auto tmp =  pos.translate(pos, move_dir, view_->width(),view_->height());
       return tiles_[tmp] == blank_tile;
     };
 
-    auto dest = origin.translate(origin, move_dir, view_->width(),view_->height());
+    auto dest = pos.translate(pos, move_dir, view_->width(),view_->height());
     if (can_move()) {
-      move(origin, dest);
+      move(pos, dest);
     } else {
-      take_action(origin, dest);
+      take_action(pos, dest);
     }
+    view_->draw(pos, *tiles_[pos]);
     view_->draw(dest, *tiles_[dest]);
   }
 }
-
 
 void game::move (const point& src, const point& dest) {
   assert (src != dest);
@@ -164,18 +165,29 @@ game::get_neighbors(const point& p) {
 }
 
 void game::take_action (const point& src, const point& dest) {
-  auto src_it = tiles_[src];
-  auto dest_it = tiles_[dest];
-  if ("Stone" == dest_it->name()) {
-    if (debug_ != 0) std::cerr << src_it->name() << " at " << src << " tried to fight a " << dest_it->name() << "\n";
-    src_it->sleep(20);
-    src_it->sleep();  // inform critter we put it to sleep
-  } else if ("Food" == dest_it->name()) {
+  auto me = tiles_[src];
+  auto other = tiles_[dest];
+  auto can_mate = [&me, &other]() {
+    return (me->name() == other->name())
+      && !me->is_baby() 
+      && !other->is_baby() 
+      && !me->is_parent() 
+      && !other->is_parent() 
+      && !other->is_asleep() 
+      && !other->is_mating();
+  };
+
+  if ("Stone" == other->name()) {
+    if (debug_ != 0) std::cerr << me->name() << " at " << src << " tried to fight a stone. sleep it off.\n";
+    me->sleep(20);
+    me->sleep();  // inform critter we put it to sleep
+  } else if ("Food" == other->name()) {
     process_food(src, dest);
-  } else if (can_mate(src_it, dest_it)) {
-    process_mate(src, src_it, dest, dest_it);
-  } else if (src_it->name() == dest_it->name()) {
-    // same species, let the mating begin...
+  } else if (me->name() == other->name()) {
+    // 2 adult same species members can mate once
+    if (can_mate()) {
+      process_mate(src, dest);
+    }
   } else {
     // 2 different species always fight
 
@@ -188,7 +200,7 @@ void game::take_action (const point& src, const point& dest) {
     };
 
     if (can_fight()) {
-      process_fight(src, src_it, dest, dest_it);
+      process_fight(src, dest);
     }
   }
 }
@@ -215,17 +227,11 @@ void game::process_food(const point& src, const point& dest)   {
   }
 }
 
-bool game::can_mate (const shared_ptr<critter>& src_it, const shared_ptr<critter>& dest_it)  {
-  if (src_it->name() != dest_it->name()) return false;
-  if (src_it->is_baby() || dest_it->is_baby()) return false;
+void game::process_mate(const point& src, const point& dest)   {
+  auto dad = tiles_[src];
+  auto mom = tiles_[dest];
 
-  return (!src_it->is_parent() && !dest_it->is_parent() && !dest_it->is_asleep() && !dest_it->is_mating());
-
-}
-
-void game::process_mate(const point& src,  shared_ptr<critter> src_it, const point& dest, shared_ptr<critter> dest_it)   {
-
-  auto neighbors = get_neighbors(src);
+  auto neighbors = get_neighbors(dest);
   direction dir = direction::CENTER;
   // find empty neightbor to put baby
   for (int i=0; i<8; ++i) {
@@ -236,29 +242,30 @@ void game::process_mate(const point& src,  shared_ptr<critter> src_it, const poi
   if (dir == direction::CENTER) {
     if(debug_ != 0)    std::cerr << "Could not find a place to have baby.\n";
   } else {
-    auto b_dest = src.translate(src, dir, view_->width(),view_->height());
-    auto baby = src_it->create();
+    auto birthplace = src.translate(src, dir, view_->width(),view_->height());
+    auto baby = mom->create();
     players_[baby->name()]->add_member();
-    src_it->start_mating(30);
-    dest_it->start_mating(30);
+    mom->start_mating(9);
+    dad->start_mating(9);
 
-    tiles_[b_dest] = baby;
-    view_->draw(b_dest, *baby);
-    view_->draw(src, *tiles_[src]);
-    view_->draw(dest, *tiles_[dest]);
-    if(debug_ != 0)    std::cerr << src_it->name() << " made baby. The baby is at: " << b_dest << "\n";
+    tiles_[birthplace] = baby;
+    view_->draw(birthplace, *baby);
+    view_->draw(src, *mom);
+    view_->draw(dest, *dad);
+    if(debug_ != 0)    std::cerr << mom->name() << " made baby. The baby is at: " << birthplace << "\n";
   }
 }
 
-void game::process_fight(const point& src,  shared_ptr<critter> src_it,
-                         const point& dest, shared_ptr<critter> dest_it)   {
-  auto results = get_fight_results(src_it, dest_it);
+void game::process_fight(const point& src, const point& dest)   {
+  auto attacker = tiles_[src];
+  auto defender = tiles_[dest];
+  auto results = get_fight_results(&*attacker, &*defender);
 
-  if(!dest_it->is_player()) {
+  if(!defender->is_player()) {
     std::cerr << "Error! fighting a non-player entitiy\n";
-    std::cerr << "\tName: " << dest_it->name() << " @" << dest_it << "\n";
+    std::cerr << "\tName: " << defender->name() << " @" << defender << "\n";
     std::cerr << "\tSource pt: " << src << ", Dest pt: " << dest << "\n";
-    std::cerr << "\tBlank_tile: " << dest_it->name() << " @" << blank_tile << "\n";
+    std::cerr << "\tBlank_tile: " << defender->name() << " @" << blank_tile << "\n";
   }
 
   //if the attacker wins, move to the dest tile
@@ -269,20 +276,19 @@ void game::process_fight(const point& src,  shared_ptr<critter> src_it,
     tiles_[dest] = blank_tile;
     view_->draw(dest, *tiles_[dest]);
     move(src,dest);
-    update_kill_stats(src_it, dest_it);
+    update_kill_stats(&*attacker, &*defender);
   } else if (results == game::fight_results::DEFENDER) {
     tiles_[src] = blank_tile;
     view_->draw(src, *tiles_[src]);
-    update_kill_stats(dest_it, src_it);
+    update_kill_stats(&*defender, &*attacker);
   } else {
-    src_it->draw();   // report back to attacker
-    dest_it->draw();  // and defender
+    attacker->draw();   // report back to attacker
+    defender->draw();  // and defender
   }
 }
 
 game::fight_results
-game::get_fight_results (shared_ptr<critter> attacker,
-    shared_ptr<critter> defender) {
+game::get_fight_results (critter* attacker, critter* defender) {
   if (defender->is_asleep() || defender->is_mating()) {
     return game::fight_results::ATTACKER;
   }
@@ -306,7 +312,7 @@ game::get_fight_results (shared_ptr<critter> attacker,
   return game::fight_results::DEFENDER;
 }
 
-void game::update_kill_stats(shared_ptr<critter> winner, shared_ptr<critter> loser) {
+void game::update_kill_stats(critter* winner, critter* loser) {
   players_[winner->name()]->add_kill();
   players_[loser->name()]->kill();
   winner->won();            // report status

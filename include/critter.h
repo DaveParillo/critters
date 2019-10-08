@@ -19,6 +19,10 @@
  * Critters that are 'players' battle it out for dominance in the critters world.
  * Critters can move in any of the 8 cardinal directions each time step (tick).
  *
+ * There is a limit on mating.
+ * A critter may mate only once, so the max population any species can achieve is
+ * 2n - 1 indivuduals.
+ *
  * @todo non-player or inanimate objects should probably not be 'critters'
  */
 class critter {
@@ -33,10 +37,10 @@ class critter {
     bool has_mated_;              /**< Has this critter mated once already? */
     int  baby_timer_;             /**< Controls how long new critters are in their newborn state */
 
-    unsigned int food_remaining_; /**< Food reserves remaining before this critter sleeps */
-    unsigned int wait_time_;      /**< Time remaining before this critter can take any action */
+    int food_remaining_; /**< Food reserves remaining before this critter sleeps */
+    int wait_time_;      /**< Time remaining before this critter can take any action */
 
-    static constexpr unsigned int 
+    static constexpr int 
       MAX_FOOD = 500;             /**< the maximum amount of food a critter can consume
                                        without being a glutton and having to sleep some of it off. */
 
@@ -229,13 +233,13 @@ class critter {
      * Returns the amount of time until the critter sleeps due to extreme hunger.
      * @return the food reserves remaining
      */
-    unsigned int food_remaining() const { return food_remaining_; }
+    int food_remaining() const { return food_remaining_; }
     /**
      * Returns the amount of time until the critter can take action,
      * either due to sleeping, mating, or waiting off some other penalty.
      * @return the wait time remaining
      */
-    unsigned int wait_remaining() const { return wait_time_; }
+    int wait_remaining() const { return wait_time_; }
 
     /**
      * Returns the awake state of this critter.
@@ -254,8 +258,7 @@ class critter {
     bool is_mating() const { return mating_; }
     /**
      * Check if this critter has already mated.
-     * A critter can only initiate mating once in its lifetime.
-     * A critter can be the recipient of mating requests an unlimited number of times.
+     * A critter can mate once in its lifetime.
      * @return true if this critter is a parent.
      */
     bool is_parent() const { 
@@ -271,11 +274,11 @@ class critter {
     }
 
     /**
-     * Called by the simulator sta start the process of two critters of the same
+     * Called by the simulator to start the process of two critters of the same
      * species to mate.
-     * @param rest the number of turns the critter will rest after mating.
+     * @param rest the number of turns the critters will rest after mating.
      */
-    void start_mating(unsigned int rest);
+    void start_mating(int rest);
 
     /**
      * Called by the simulator when the return value from critter::eat == true.
@@ -288,7 +291,7 @@ class critter {
      * Force this critter to sleep the indicated number of turns.
      * @param num_turns the number of turns the critter will sleep.
      */
-    void sleep(unsigned int num_turns);
+    void sleep(int num_turns);
 
     /**
      * Update critter state variables that need modifying every time step:

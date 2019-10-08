@@ -108,7 +108,6 @@ class game {
      * Calls update and modifies critters according to the rules of the game.
      */
     void  update_tiles();
-    bool  lone_species();
 
     /**
      * Update is the starting point for all movement and action initiated by a critter
@@ -116,6 +115,7 @@ class game {
      * @param t a reference to a game tile
      */
     void  update           (const std::pair<point,  std::shared_ptr<critter>>& t);
+
     /**
      * Move a critter from a source point to a destination.
      *
@@ -125,45 +125,34 @@ class game {
      * @param dest the destintation position
      */
     void  move             (const point& src, const point& dest);
+
     /**
      * Controller for all non-movement actions taken by a critter (fight, mate, etc).
      * @param src the position where this critter currently resides (origin position)
      * @param dest the destintation position
      */
     void  take_action      (const point& src, const point& dest);
+
     /**
      * Controller what happens when a critter moves onto a tile containing food.
      * @param src the position where this critter currently resides (origin position)
      * @param dest the destination postion
      */
     void  process_food     (const point& src, const point& dest);
-    /**
-     * Determine whether a critter is allowed to mate.
-     * @param src_it a reference to the critter initiating the mating
-     * @param dest_it a reference to the receiving critter 
-     * @return true if src_it and dest_it can mate
-     */
-    bool  can_mate         (const std::shared_ptr<critter>& src_it, const std::shared_ptr<critter>& dest_it);
 
     /**
      * Controller what happens when a critter moves onto a tile containing a mate.
      * @param src the position where this critter currently resides
-     * @param src_it a reference to the critter
      * @param dest the position where the mate resides
-     * @param dest_it a reference to the mate
      */
-    void  process_mate     (const point& src,  std::shared_ptr<critter> src_it,
-                            const point& dest, std::shared_ptr<critter> dest_it);
+    void  process_mate     (const point& src, const point& dest);
 
     /**
      * Controller what happens when a critter moves onto a tile containing food.
      * @param src the position where this critter currently resides
-     * @param src_it a reference to the critter
      * @param dest the position where the opponent resides
-     * @param dest_it a reference to the opponent
      */
-    void  process_fight    (const point& src,  std::shared_ptr<critter> src_it,
-                            const point& dest, std::shared_ptr<critter> dest_it);
+    void  process_fight    (const point& src, const point& dest);
 
     /**
      * Determine the outcome of two critters that are fighting.
@@ -171,15 +160,14 @@ class game {
      * @param defender a reference to the opponent
      * @return the outcome, which could be a draw (no winner)
      */
-    fight_results get_fight_results    
-      (std::shared_ptr<critter> attacker, std::shared_ptr<critter> defender);
+    fight_results get_fight_results (critter* attacker, critter* defender);
 
     /**
      * Update scores and outcomes after a fight.
      * @param winner reference to the winner of the fight
      * @param loser reference to the loser of the fight
      */
-    void update_kill_stats (std::shared_ptr<critter> winner, std::shared_ptr<critter> loser);
+    void update_kill_stats (critter* winner, critter* loser);
 
     /**
      * Get all of the neighoring tiles that surround the indicated location.

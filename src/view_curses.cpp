@@ -117,11 +117,11 @@ void view_curses::setup_colors() const {
   init_pair(18, COLOR_BLACK, COLOR_CYAN);
   // 'mating' colors
   init_pair(22,COLOR_WHITE, COLOR_RED);
-  init_pair(23,COLOR_MAGENTA, COLOR_RED);
+  init_pair(23,COLOR_BLACK, COLOR_RED);
   init_pair(24,COLOR_GREEN, COLOR_RED);
   init_pair(25,COLOR_BLUE, COLOR_RED);
   init_pair(26,COLOR_YELLOW, COLOR_RED);
-  init_pair(27,COLOR_MAGENTA, COLOR_RED);
+  init_pair(27,COLOR_WHITE, COLOR_RED);
   init_pair(28,COLOR_CYAN, COLOR_RED);
 }
 
