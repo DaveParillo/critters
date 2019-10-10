@@ -148,8 +148,8 @@ void game::move (const point& src, const point& dest) {
   assert (tiles_[dest] == blank_tile || tiles_[dest]->name() == "Food");
   assert (tiles_[dest]->name() != "Stone");
   std::swap(tiles_[src], tiles_[dest]);
-  view_->draw(src, *tiles_[src]);
-  view_->draw(dest, *tiles_[dest]);
+  // view_->draw(src, *tiles_[src]);
+  // view_->draw(dest, *tiles_[dest]);
 }
 
 
@@ -231,7 +231,7 @@ void game::process_mate(const point& src, const point& dest)   {
   auto dad = tiles_[src];
   auto mom = tiles_[dest];
 
-  auto neighbors = get_neighbors(dest);
+  auto neighbors = get_neighbors(src);
   direction dir = direction::CENTER;
   // find empty neightbor to put baby
   for (int i=0; i<8; ++i) {
@@ -279,7 +279,7 @@ void game::process_fight(const point& src, const point& dest)   {
     update_kill_stats(&*attacker, &*defender);
   } else if (results == game::fight_results::DEFENDER) {
     tiles_[src] = blank_tile;
-    view_->draw(src, *tiles_[src]);
+    // view_->draw(src, *tiles_[src]);
     update_kill_stats(&*defender, &*attacker);
   } else {
     attacker->draw();   // report back to attacker
