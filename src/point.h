@@ -127,7 +127,7 @@ namespace std {
         using std::hash;
         using std::string;
 
-        return ((hash<int>()(719)
+        return ((hash<int>()(31)
               ^ (hash<int16_t>()(p.x) << 1)) >> 1)
               ^ (hash<int16_t>()(p.y) << 1);
       }
