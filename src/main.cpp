@@ -83,7 +83,6 @@ int main(int argc, char** argv) {
 
   int c;
   int debug = 0;
-  string view = "default";
   string prog = argv[0];
 #ifdef WITH_SOLUTIONS
   auto valid_args = "hdf:n:s:x:y:LTBRWD";
@@ -139,7 +138,7 @@ int main(int argc, char** argv) {
 
   game g;
 
-  g.set_view(std::unique_ptr<view_curses>(new view_curses(x, y)));
+  g.set_view(std::unique_ptr<view>(new view_curses(x, y)));
   g.set_debug(debug);
   g.add_item(make_shared<stone>(),     max_stones);
   g.add_item(make_shared<food>(),      max_food);
