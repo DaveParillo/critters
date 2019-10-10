@@ -119,12 +119,11 @@ namespace std {
        * Return the hash code for a point.
        *
        * @see http://en.cppreference.com/w/cpp/utility/hash
-       * @param p the Point to generate a hashcode for
+       * @param p the point to generate a hashcode for
        * @return the hashcode
        */
-      std::size_t operator()(const point& p) const
+      size_t operator()(const point& p) const
       {
-        using std::size_t;
         using std::hash;
         using std::string;
 
