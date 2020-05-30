@@ -112,9 +112,13 @@ how much food they have eaten, and how many other animals they have killed.
 # Compiling
 
 Requires cmake, a ISO C++14 compatible compiler, and the ncurses library.
-Currently Windows is not supported.
+Currently Windows is not well supported.
+It is possible to compile on Windows under cygwin,
+a unix-like environment for windows.
+You'll need to install ncurses for cygwin and run the program
+within the cygwin bash shell.
 
-Compiles using cmake on mac, GNU/linux, and cygwin with:
+Critters compiles using cmake on Mac OS, GNU/linux, and cygwin with:
 
     mkdir build
     cmake ..
