@@ -92,16 +92,15 @@ As a critter moves, it may encounter food, in which case the simulator will ask 
 critter whether it wants to eat it. 
 Different kinds of animals have different eating behavior; 
 some always eat, and others only eat under certain conditions. 
-Every time one class of animals eats a few pieces of food, that critter will be 
-put to "sleep" by the simulator for a small amount of time. 
+If a critter overindulges, then that critter will be forced to 
+"sleep off" their gluttony for a small amount of time. 
 While asleep, critters cannot move, and if they are attacked, they will always lose.
 
 ## Obstacles / Hazards
 Some items in the world are hazards and should be avoided.
 If a critter moves onto a Stone, for example, it is 'stunned' for a time.
 While stunned, a critter cannot move, and if they are attacked, they will always lose.
-
-
+Golden rule: don't walk into rocks.
 
 ## Scoring
 The simulator keeps a score for each class (species) of critter, 
@@ -160,4 +159,3 @@ Output will be written to 'html'.
 Open ./html/index.html to browse the docs.
 This README will be included as the default page.
 
-## 
