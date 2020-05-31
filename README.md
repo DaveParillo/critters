@@ -92,16 +92,15 @@ As a critter moves, it may encounter food, in which case the simulator will ask 
 critter whether it wants to eat it. 
 Different kinds of animals have different eating behavior; 
 some always eat, and others only eat under certain conditions. 
-Every time one class of animals eats a few pieces of food, that critter will be 
-put to "sleep" by the simulator for a small amount of time. 
+If a critter overindulges, then that critter will be forced to 
+"sleep off" their gluttony for a small amount of time. 
 While asleep, critters cannot move, and if they are attacked, they will always lose.
 
 ## Obstacles / Hazards
 Some items in the world are hazards and should be avoided.
 If a critter moves onto a Stone, for example, it is 'stunned' for a time.
 While stunned, a critter cannot move, and if they are attacked, they will always lose.
-
-
+Golden rule: don't walk into rocks.
 
 ## Scoring
 The simulator keeps a score for each class (species) of critter, 
@@ -113,9 +112,13 @@ how much food they have eaten, and how many other animals they have killed.
 # Compiling
 
 Requires cmake, a ISO C++17 compatible compiler, and the ncurses library.
-Currently Windows is not supported except for within cygwin.
+Currently Windows is not well supported.
+It is possible to compile on Windows under cygwin,
+a unix-like environment for windows.
+You'll need to install ncurses for cygwin and run the program
+within the cygwin bash shell.
 
-Compiles using cmake on mac, GNU/linux, and cygwin with:
+Critters compiles using cmake on Mac OS, GNU/linux, and cygwin with:
 
     mkdir build
     cmake ..
@@ -160,4 +163,3 @@ Output will be written to 'html'.
 Open ./html/index.html to browse the docs.
 This README will be included as the default page.
 
-## 
