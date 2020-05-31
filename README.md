@@ -112,8 +112,8 @@ how much food they have eaten, and how many other animals they have killed.
 
 # Compiling
 
-Requires cmake, a ISO C++14 compatible compiler, and the ncurses library.
-Currently Windows is not supported.
+Requires cmake, a ISO C++17 compatible compiler, and the ncurses library.
+Currently Windows is not supported except for within cygwin.
 
 Compiles using cmake on mac, GNU/linux, and cygwin with:
 
@@ -125,13 +125,13 @@ Feel free to substitute you own cmake Generator.
 Typing `cmake -G` will show you a list of generators for your cmake.
 
 There is 1 cmake configuration option: `WITH_SOLUTIONS`
-It defaults to **ON**.
-If set to OFF, it will exclude the sample critter solutions.
+It defaults to **OFF**.
+If set to ON, it will attempt to compile the sample critter solutions.
 
-  cmake -DWITH_SOLUTIONS=OFF ..
+  cmake -DWITH_SOLUTIONS=ON ..
 
-This will make a library without any sample critters.
-Useful for a tournament containing only student authored critters.
+This will make a library with sample critters.
+Useful for a testing student authored critters in a sandbox.
 
 If using the default Unix Makefile generator,
 the output is:

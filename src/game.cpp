@@ -48,13 +48,13 @@ void game::start() {
     command_ = view_->get_key();
 
     if (command_ == 'h') {
-      if (help) view_->hide_help();  // hide only if already being shown
+      if (help) { view_->hide_help(); }  // hide only if already being shown
       help = !help;
     }
-    if (help)                               view_->show_help();
-    if (command_ == 'p')                    play = !play;
-    if (command_ == '-')                    delay = std::min(25000, delay + 100);
-    if (command_ == '=' || command_ == '+') delay = std::max(  10, delay - 100);
+    if (help)                               { view_->show_help(); }
+    if (command_ == 'p')                    { play = !play; }
+    if (command_ == '-')                    { delay = std::min(25000, delay + 100); }
+    if (command_ == '=' || command_ == '+') { delay = std::max(  10, delay - 100); }
     sleep_for(std::chrono::microseconds(100));
 
     if (play && count > delay) {
@@ -63,15 +63,16 @@ void game::start() {
       update_tiles();
       view_->update_time(tick_);
       view_->update_score(players_);
-      // one specied left standing
-      auto alone = [this]() {
-        auto count = 0;
-        for (const auto& p : players_) {
-          if (p.second->alive() > 0) ++count;
-        }
-        return count <= 1;
-      };
-      // if (alone())                 play = false;
+      // one species left standing
+      if (auto alone = [this]() {
+            auto count = 0;
+            for (const auto& p : players_) {
+              if (p.second->alive() > 0) ++count;
+            }
+            return count <= 1;
+          }; alone()) {
+        play = false;
+      }
     }
     ++count;
   }
@@ -126,14 +127,12 @@ void game::update (const tile& t) {
       return;
     }
 
-    auto can_move = [&pos, &it, &move_dir, this]() {
-      if (it->wait_remaining() != 0u)    return false;
-      auto tmp =  pos.translate(pos, move_dir, view_->width(),view_->height());
-      return tiles_[tmp] == blank_tile;
-    };
-
     auto dest = pos.translate(pos, move_dir, view_->width(),view_->height());
-    if (can_move()) {
+    if (auto can_move = [&pos, &it, &move_dir, this]() {
+          if (it->wait_remaining() != 0u)    return false;
+          auto tmp =  pos.translate(pos, move_dir, view_->width(),view_->height());
+          return tiles_[tmp] == blank_tile;
+        }; can_move()) {
       move(pos, dest);
     } else {
       take_action(pos, dest);
@@ -167,15 +166,6 @@ game::get_neighbors(const point& p) {
 void game::take_action (const point& src, const point& dest) {
   auto me = tiles_[src];
   auto other = tiles_[dest];
-  auto can_mate = [&me, &other]() {
-    return (me->name() == other->name())
-      && !me->is_baby() 
-      && !other->is_baby() 
-      && !me->is_parent() 
-      && !other->is_parent() 
-      && !other->is_asleep() 
-      && !other->is_mating();
-  };
 
   if ("Stone" == other->name()) {
     if (debug_ != 0) std::cerr << me->name() << " at " << src << " tried to fight a stone. sleep it off.\n";
@@ -185,21 +175,26 @@ void game::take_action (const point& src, const point& dest) {
     process_food(src, dest);
   } else if (me->name() == other->name()) {
     // 2 adult same species members can mate once
-    if (can_mate()) {
+    if (auto can_mate = [&me, &other]() {
+          return (me->name() == other->name())
+            && !me->is_baby() 
+            && !other->is_baby() 
+            && !me->is_parent() 
+            && !other->is_parent() 
+            && !other->is_asleep() 
+            && !other->is_mating();
+        }; can_mate()) {
       process_mate(src, dest);
     }
   } else {
     // 2 different species always fight
-
-    auto can_fight = [&src, &dest, this]() {
-      auto other =  tiles_[dest];
-      if(tiles_[src]->wait_remaining() > 0 || other == blank_tile) {
-        return false;
-      }
-      return other->is_player();
-    };
-
-    if (can_fight()) {
+    if (auto can_fight = [&src, &dest, this]() {
+        auto other =  tiles_[dest];
+        if(tiles_[src]->wait_remaining() > 0 || other == blank_tile) {
+          return false;
+        }
+        return other->is_player();
+      }; can_fight()) {
       process_fight(src, dest);
     }
   }
@@ -323,11 +318,10 @@ void game::add_item(shared_ptr<critter> item, const int num_items) {
   assert(item != nullptr);
   typedef std::unordered_map<point,shared_ptr<critter>>::value_type tile_type;
 
-  int free = count_if(tiles_.begin(), tiles_.end(), 
+  if (int free = count_if(tiles_.begin(), tiles_.end(), 
       [&](tile_type t) {
         return t.second == this->blank_tile;
-      });
-  if (free < num_items) {
+      }); free < num_items) {
     view_->teardown();
     std::cerr << "Not enough blank tiles remaining to add " 
               << num_items << ' ' << item->name() << std::endl;

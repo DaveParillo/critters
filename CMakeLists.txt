@@ -5,7 +5,7 @@ if(${CMAKE_VERSION} VERSION_LESS 3.12)
 endif()
 
 project(critters-game VERSION 1.0.0 LANGUAGES CXX)
-set (CMAKE_CXX_STANDARD 14)
+set (CMAKE_CXX_STANDARD 17)
 set (CMAKE_CXX_STANDARD_REQUIRED YES)
 set (CMAKE_CXX_EXTENSIONS OFF)
 
@@ -15,7 +15,7 @@ else()
   add_compile_options(-Wall -Wextra -pedantic)
 endif(MSVC)
 
-option(WITH_SOLUTIONS "Compile in solutions" ON)
+option(WITH_SOLUTIONS "Compile in solutions" OFF)
 
 include_directories(
   ${CMAKE_SOURCE_DIR}/include
